@@ -39,6 +39,7 @@
             android:id="@+id/btn_dialog_negative"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
             android:layout_weight="1"
             android:text="Cancel" />
 
@@ -46,6 +47,7 @@
             android:id="@+id/btn_dialog_positive"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
             android:layout_weight="1"
             android:text="Save" />
 
