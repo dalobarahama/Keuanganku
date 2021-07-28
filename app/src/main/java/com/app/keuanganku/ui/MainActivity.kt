@@ -1,16 +1,21 @@
 package com.app.keuanganku.ui
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.InputType
+import android.view.View
+import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.app.keuanganku.R
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.databinding.ActivityMainBinding
 import com.app.keuanganku.viewmodel.ViewModelFactory
+import java.text.NumberFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +25,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var keuangankuViewModel: KeuangankuViewModel
 
     private var salaryIsNull = true
+    private lateinit var salaryEntityFromDB: SalaryEntity
+
+    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +38,15 @@ class MainActivity : AppCompatActivity() {
         keuangankuViewModel = obtainViewModel(this)
         keuangankuViewModel.getSalary().observe(this, salaryObserver)
 
+        currencyFormat.maximumFractionDigits = 0
+        currencyFormat.currency = Currency.getInstance("IDR")
+
         binding?.btnAddSalary?.setOnClickListener {
-            showAlertDialog()
+            showDialogInputSalary()
         }
 
         binding?.btnAddSalaryAllocation?.setOnClickListener {
-            Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show()
+            showDialogInputSalaryAllocation()
         }
     }
 
@@ -47,39 +58,87 @@ class MainActivity : AppCompatActivity() {
     private val salaryObserver = Observer<SalaryEntity> { salary ->
         if (salary != null) {
             salaryIsNull = false
-            ("Salary Rp " + salary.salary.toString()).also { binding?.tvSalary!!.text = it }
+            ("Salary " + currencyFormat.format(salary.salary)).also {
+                binding?.tvSalary!!.text = it
+            }
+            salaryEntityFromDB = salary
         }
     }
 
-    private fun showAlertDialog() {
-        val builder = AlertDialog.Builder(this)
+    private fun showDialogInputSalary() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_layout)
 
-        val editTextInput = EditText(this)
-        editTextInput.hint = "1000000"
-        editTextInput.inputType = InputType.TYPE_CLASS_NUMBER
+        val editTextInputSalary = dialog.findViewById<EditText>(R.id.et_dialog_first_input)
+        val textViewTitle = dialog.findViewById<TextView>(R.id.tv_dialog_title)
+        val buttonCancel = dialog.findViewById<Button>(R.id.btn_dialog_negative)
+        val buttonSave = dialog.findViewById<Button>(R.id.btn_dialog_positive)
 
-        builder.setTitle("Input Salary")
-        builder.setView(editTextInput)
-
-        builder.setPositiveButton("Save") { _, _ ->
-            val salary = editTextInput.text.toString()
-            val salaryEntity = SalaryEntity(1, salary.toInt())
-            if (salaryIsNull) {
-                keuangankuViewModel.insertSalary(salaryEntity)
-            } else {
-                keuangankuViewModel.updateSalary(salaryEntity)
-            }
+        editTextInputSalary.hint = "1000000"
+        editTextInputSalary.inputType = InputType.TYPE_CLASS_NUMBER
+        if (!salaryIsNull) {
+            salaryEntityFromDB.salary.toString().let { editTextInputSalary.setText(it) }
         }
 
-        builder.setNegativeButton("Cancel") { dialog, _ ->
+        textViewTitle.text = "Input Salary"
+
+        buttonSave.setOnClickListener {
+            saveSalary(editTextInputSalary.text.toString())
+            dialog.dismiss()
+        }
+
+        buttonCancel.setOnClickListener {
             dialog.cancel()
         }
 
-        builder.show()
+        dialog.show()
+    }
+
+    private fun showDialogInputSalaryAllocation() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_layout)
+
+        val editTextInputAllocationTitle = dialog.findViewById<EditText>(R.id.et_dialog_first_input)
+        val editTextInputAllocationAmount =
+            dialog.findViewById<EditText>(R.id.et_dialog_second_input)
+        val textViewTitle = dialog.findViewById<TextView>(R.id.tv_dialog_title)
+        val buttonCancel = dialog.findViewById<Button>(R.id.btn_dialog_negative)
+        val buttonSave = dialog.findViewById<Button>(R.id.btn_dialog_positive)
+
+        textViewTitle.text = "Input Salary Allocation"
+
+        editTextInputAllocationTitle.hint = "Title"
+        editTextInputAllocationTitle.inputType = InputType.TYPE_CLASS_TEXT
+
+        editTextInputAllocationAmount.visibility = View.VISIBLE
+        editTextInputAllocationAmount.hint = "Amount"
+        editTextInputAllocationAmount.inputType = InputType.TYPE_CLASS_NUMBER
+
+        buttonSave.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        buttonCancel.setOnClickListener {
+            dialog.cancel()
+        }
+
+        dialog.show()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _activityMainBinding = null
+    }
+
+    private fun saveSalary(salary: String) {
+        val salaryEntity: SalaryEntity
+
+        if (salaryIsNull) {
+            salaryEntity = SalaryEntity(null, salary.toInt())
+            keuangankuViewModel.insertSalary(salaryEntity)
+        } else {
+            salaryEntityFromDB.salary = salary.toInt()
+            keuangankuViewModel.updateSalary(salaryEntityFromDB)
+        }
     }
 }
