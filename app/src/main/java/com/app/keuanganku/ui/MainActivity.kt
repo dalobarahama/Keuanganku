@@ -3,6 +3,7 @@ package com.app.keuanganku.ui
 import android.app.Dialog
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -10,8 +11,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.keuanganku.R
+import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
+import com.app.keuanganku.data.helper.CurrencyFormatterIDR
 import com.app.keuanganku.databinding.ActivityMainBinding
 import com.app.keuanganku.viewmodel.ViewModelFactory
 import java.text.NumberFormat
@@ -27,7 +31,9 @@ class MainActivity : AppCompatActivity() {
     private var salaryIsNull = true
     private lateinit var salaryEntityFromDB: SalaryEntity
 
-    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance()
+    private lateinit var adapter: MainActivityAdapter
+
+    private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +41,11 @@ class MainActivity : AppCompatActivity() {
         _activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+        adapter = MainActivityAdapter(this)
+
         keuangankuViewModel = obtainViewModel(this)
         keuangankuViewModel.getSalary().observe(this, salaryObserver)
-
-        currencyFormat.maximumFractionDigits = 0
-        currencyFormat.currency = Currency.getInstance("IDR")
+        keuangankuViewModel.getAllSalaryAllocation().observe(this, salaryAllocationObserver)
 
         binding?.btnAddSalary?.setOnClickListener {
             showDialogInputSalary()
@@ -48,6 +54,10 @@ class MainActivity : AppCompatActivity() {
         binding?.btnAddSalaryAllocation?.setOnClickListener {
             showDialogInputSalaryAllocation()
         }
+
+        binding?.rvAllocation?.layoutManager = LinearLayoutManager(this)
+        binding?.rvAllocation?.setHasFixedSize(true)
+        binding?.rvAllocation?.adapter = adapter
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): KeuangankuViewModel {
@@ -58,10 +68,18 @@ class MainActivity : AppCompatActivity() {
     private val salaryObserver = Observer<SalaryEntity> { salary ->
         if (salary != null) {
             salaryIsNull = false
-            ("Salary " + currencyFormat.format(salary.salary)).also {
+            ("Salary " + salary.salary?.let { currencyFormatterIDR.getCurrency(it) }).also {
                 binding?.tvSalary!!.text = it
             }
             salaryEntityFromDB = salary
+        }
+    }
+
+    private val salaryAllocationObserver = Observer<List<SalaryAllocation>> { salaryAllocation ->
+        if (salaryAllocation != null) {
+            salaryAllocation[0].title?.let { Log.i("SalaryAllocation ", it) }
+
+            adapter.setListSalaryAllocations(salaryAllocation)
         }
     }
 
@@ -115,6 +133,12 @@ class MainActivity : AppCompatActivity() {
         editTextInputAllocationAmount.inputType = InputType.TYPE_CLASS_NUMBER
 
         buttonSave.setOnClickListener {
+            val salaryAllocation = SalaryAllocation(
+                null,
+                editTextInputAllocationTitle.text.toString(),
+                Integer.parseInt(editTextInputAllocationAmount.text.toString())
+            )
+            saveSalaryAllocation(salaryAllocation)
             dialog.dismiss()
         }
 
@@ -140,5 +164,9 @@ class MainActivity : AppCompatActivity() {
             salaryEntityFromDB.salary = salary.toInt()
             keuangankuViewModel.updateSalary(salaryEntityFromDB)
         }
+    }
+
+    private fun saveSalaryAllocation(salaryAllocation: SalaryAllocation) {
+        keuangankuViewModel.insertSalaryAllocation(salaryAllocation)
     }
 }
