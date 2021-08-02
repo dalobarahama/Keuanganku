@@ -2,6 +2,7 @@ package com.app.keuanganku.data
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import com.app.keuanganku.data.entity.AllocationItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.data.room.DatabaseKeuanganku
@@ -23,6 +24,9 @@ class Repository(application: Application) {
     fun getAllSalaryAllocation(): LiveData<List<SalaryAllocation>> =
         keuangankuDao.getAllSalaryAllocation()
 
+    fun getAllAllocationItem(): LiveData<List<AllocationItem>> =
+        keuangankuDao.getAllSAllocationItem()
+
     fun insertSalary(salary: SalaryEntity) {
         executorService.execute { keuangankuDao.insertSalary(salary) }
     }
@@ -37,5 +41,13 @@ class Repository(application: Application) {
 
     fun updateSalaryAllocation(salaryAllocation: SalaryAllocation) {
         executorService.execute { keuangankuDao.updateSalaryAllocation(salaryAllocation) }
+    }
+
+    fun insertAllocationItem(allocationItem: AllocationItem) {
+        executorService.execute { keuangankuDao.insertAllocationItem(allocationItem) }
+    }
+
+    fun updateAllocationItem(allocationItem: AllocationItem) {
+        executorService.execute { keuangankuDao.updateAllocationItem(allocationItem) }
     }
 }

@@ -4,11 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.app.keuanganku.data.entity.AllocationItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
 
 @Database(
-    entities = [SalaryEntity::class, SalaryAllocation::class],
+    entities = [SalaryEntity::class, SalaryAllocation::class, AllocationItem::class],
     version = 1,
     exportSchema = false
 )

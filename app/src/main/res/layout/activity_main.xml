@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:text="Salary Rp 1.000.000"
+            android:text="Salary 0"
             android:textSize="24sp" />
 
         <Button

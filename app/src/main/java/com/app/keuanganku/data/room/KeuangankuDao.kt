@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.app.keuanganku.data.entity.AllocationItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
 
@@ -28,4 +29,13 @@ interface KeuangankuDao {
 
     @Query("SELECT * FROM salary_allocation")
     fun getAllSalaryAllocation(): LiveData<List<SalaryAllocation>>
+
+    @Insert
+    fun insertAllocationItem(allocationItem: AllocationItem)
+
+    @Update
+    fun updateAllocationItem(allocationItem: AllocationItem)
+
+    @Query("SELECT * FROM allocation_item")
+    fun getAllSAllocationItem(): LiveData<List<AllocationItem>>
 }

@@ -3,20 +3,28 @@ package com.app.keuanganku.ui
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.app.keuanganku.data.entity.AllocationItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.helper.AllocationDiffCallback
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
 import com.app.keuanganku.databinding.ItemSalaryAllocationBinding
 import com.app.keuanganku.ui.MainActivityAdapter.MainActivityViewHolder
 
-class MainActivityAdapter internal constructor(private val activity: Activity) :
+class MainActivityAdapter internal constructor(
+    private val activity: Activity,
+    private val onClickButtonItem: OnClickButtonItem,
+) :
     RecyclerView.Adapter<MainActivityViewHolder>() {
     private val listSalaryAllocations = ArrayList<SalaryAllocation>()
 
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
+
+    private var totalAllocationAmount = 0
+
+    private val listAllocationItem = ArrayList<AllocationItem>()
 
     fun setListSalaryAllocations(listAllocation: List<SalaryAllocation>) {
         val diffCallback = AllocationDiffCallback(this.listSalaryAllocations, listAllocation)
@@ -25,6 +33,15 @@ class MainActivityAdapter internal constructor(private val activity: Activity) :
         this.listSalaryAllocations.clear()
         this.listSalaryAllocations.addAll(listAllocation)
         diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun setAllocationTotalAmount(amount: Int) {
+        this.totalAllocationAmount = amount
+    }
+
+    fun setAllocationItemList(allocationItemList: List<AllocationItem>) {
+        this.listAllocationItem.clear()
+        this.listAllocationItem.addAll(allocationItemList)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainActivityViewHolder {
@@ -51,11 +68,22 @@ class MainActivityAdapter internal constructor(private val activity: Activity) :
                         it
                     )
                 }
+                tvAllocationTotalSpend.text = totalAllocationAmount.toString()
                 btnAddAllocationItem.setOnClickListener {
-                    Toast.makeText(activity.applicationContext, "Clicked", Toast.LENGTH_SHORT)
-                        .show()
+                    onClickButtonItem.onButtonOnClick()
                 }
+
+                val adapter = AllocationItemAdapter(activity)
+
+                rvItemAllocation.layoutManager = LinearLayoutManager(activity.applicationContext)
+                rvItemAllocation.setHasFixedSize(true)
+                rvItemAllocation.adapter = adapter
             }
         }
     }
+}
+
+interface OnClickButtonItem {
+    fun onButtonOnClick()
+
 }

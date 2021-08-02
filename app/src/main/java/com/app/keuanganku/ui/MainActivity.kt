@@ -3,25 +3,25 @@ package com.app.keuanganku.ui
 import android.app.Dialog
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.keuanganku.R
+import com.app.keuanganku.data.entity.AllocationItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
+import com.app.keuanganku.data.helper.TotalAllocation
 import com.app.keuanganku.databinding.ActivityMainBinding
 import com.app.keuanganku.viewmodel.ViewModelFactory
-import java.text.NumberFormat
-import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnClickButtonItem {
 
     private var _activityMainBinding: ActivityMainBinding? = null
     private val binding get() = _activityMainBinding
@@ -31,9 +31,12 @@ class MainActivity : AppCompatActivity() {
     private var salaryIsNull = true
     private lateinit var salaryEntityFromDB: SalaryEntity
 
-    private lateinit var adapter: MainActivityAdapter
+    private lateinit var mainActivityAdapter: MainActivityAdapter
+    private lateinit var allocationItemAdapter: AllocationItemAdapter
 
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
+
+    private val totalAllocation: TotalAllocation = TotalAllocation()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +44,14 @@ class MainActivity : AppCompatActivity() {
         _activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
-        adapter = MainActivityAdapter(this)
+        mainActivityAdapter = MainActivityAdapter(this, this)
+        allocationItemAdapter = AllocationItemAdapter(this)
 
         keuangankuViewModel = obtainViewModel(this)
         keuangankuViewModel.getSalary().observe(this, salaryObserver)
         keuangankuViewModel.getAllSalaryAllocation().observe(this, salaryAllocationObserver)
+        keuangankuViewModel.getTotalAllocation().observe(this, salaryAllocationTotalAmountObserver)
+        keuangankuViewModel.getAllAllocationItem().observe(this, salaryAllocationItemObserver)
 
         binding?.btnAddSalary?.setOnClickListener {
             showDialogInputSalary()
@@ -57,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
         binding?.rvAllocation?.layoutManager = LinearLayoutManager(this)
         binding?.rvAllocation?.setHasFixedSize(true)
-        binding?.rvAllocation?.adapter = adapter
+        binding?.rvAllocation?.adapter = mainActivityAdapter
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): KeuangankuViewModel {
@@ -77,9 +83,20 @@ class MainActivity : AppCompatActivity() {
 
     private val salaryAllocationObserver = Observer<List<SalaryAllocation>> { salaryAllocation ->
         if (salaryAllocation != null) {
-            salaryAllocation[0].title?.let { Log.i("SalaryAllocation ", it) }
+            mainActivityAdapter.setListSalaryAllocations(salaryAllocation)
 
-            adapter.setListSalaryAllocations(salaryAllocation)
+            keuangankuViewModel.setAllocationList(salaryAllocation)
+        }
+    }
+
+    private val salaryAllocationTotalAmountObserver = Observer<Int> { amount ->
+        if (amount != null)
+            mainActivityAdapter.setAllocationTotalAmount(amount)
+    }
+
+    private val salaryAllocationItemObserver = Observer<List<AllocationItem>> { allocationItem ->
+        if (allocationItem != null) {
+            allocationItemAdapter.setListAllocationItem(allocationItem)
         }
     }
 
@@ -149,6 +166,43 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    private fun showDialogInputAllocationItem() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_layout)
+
+        val editTextInputAllocationTitle = dialog.findViewById<EditText>(R.id.et_dialog_first_input)
+        val editTextInputAllocationAmount =
+            dialog.findViewById<EditText>(R.id.et_dialog_second_input)
+        val textViewTitle = dialog.findViewById<TextView>(R.id.tv_dialog_title)
+        val buttonCancel = dialog.findViewById<Button>(R.id.btn_dialog_negative)
+        val buttonSave = dialog.findViewById<Button>(R.id.btn_dialog_positive)
+
+        textViewTitle.text = "Input Salary Allocation"
+
+        editTextInputAllocationTitle.hint = "Title"
+        editTextInputAllocationTitle.inputType = InputType.TYPE_CLASS_TEXT
+
+        editTextInputAllocationAmount.visibility = View.VISIBLE
+        editTextInputAllocationAmount.hint = "Amount"
+        editTextInputAllocationAmount.inputType = InputType.TYPE_CLASS_NUMBER
+
+        buttonSave.setOnClickListener {
+            val allocationItem = AllocationItem(
+                null,
+                editTextInputAllocationTitle.text.toString(),
+                Integer.parseInt(editTextInputAllocationAmount.text.toString())
+            )
+            saveAllocationItem(allocationItem)
+            dialog.dismiss()
+        }
+
+        buttonCancel.setOnClickListener {
+            dialog.cancel()
+        }
+
+        dialog.show()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _activityMainBinding = null
@@ -168,5 +222,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun saveSalaryAllocation(salaryAllocation: SalaryAllocation) {
         keuangankuViewModel.insertSalaryAllocation(salaryAllocation)
+    }
+
+    private fun saveAllocationItem(allocationItem: AllocationItem) {
+        keuangankuViewModel.insertAllocationItem(allocationItem)
+    }
+
+    override fun onButtonOnClick() {
+        Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT)
+            .show()
+        showDialogInputAllocationItem()
     }
 }

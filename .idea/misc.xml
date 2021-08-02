@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="app/src/main/res/layout/dialog_layout.xml" value="0.1408514492753623" />
+        <entry key="app/src/main/res/layout/item_allocation.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_salary_allocation.xml" value="0.25" />
       </map>
     </option>
