@@ -45,7 +45,7 @@ class KeuangankuViewModel(application: Application) : ViewModel() {
 
     fun getAllAllocationItem(): LiveData<List<AllocationItem>> = repository.getAllAllocationItem()
 
-    fun setAllocationList(allocationList: List<SalaryAllocation>) {
+    fun setAllocationList(allocationList: List<AllocationItem>) {
         totalAllocation.setAllocationList(allocationList)
     }
 

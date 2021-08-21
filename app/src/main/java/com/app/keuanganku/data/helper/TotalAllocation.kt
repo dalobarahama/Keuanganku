@@ -3,13 +3,13 @@ package com.app.keuanganku.data.helper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.app.keuanganku.data.entity.SalaryAllocation
+import com.app.keuanganku.data.entity.AllocationItem
 
 class TotalAllocation {
 
     private var totalAllocation: MutableLiveData<Int> = MutableLiveData<Int>()
 
-    private var allocationList = ArrayList<SalaryAllocation>()
+    private var allocationList = ArrayList<AllocationItem>()
 
     private fun calculateTotal() {
         var total = 0
@@ -20,7 +20,7 @@ class TotalAllocation {
         totalAllocation.value = total
     }
 
-    fun setAllocationList(allocationList: List<SalaryAllocation>) {
+    fun setAllocationList(allocationList: List<AllocationItem>) {
         this.allocationList.clear()
         this.allocationList.addAll(allocationList)
         calculateTotal()

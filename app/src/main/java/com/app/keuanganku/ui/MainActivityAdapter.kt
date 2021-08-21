@@ -1,8 +1,10 @@
 package com.app.keuanganku.ui
 
-import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +14,10 @@ import com.app.keuanganku.data.helper.AllocationDiffCallback
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
 import com.app.keuanganku.databinding.ItemSalaryAllocationBinding
 import com.app.keuanganku.ui.MainActivityAdapter.MainActivityViewHolder
+import com.app.keuanganku.viewmodel.ViewModelFactory
 
 class MainActivityAdapter internal constructor(
-    private val activity: Activity,
+    private val context: Context,
     private val onClickButtonItem: OnClickButtonItem,
 ) :
     RecyclerView.Adapter<MainActivityViewHolder>() {
@@ -23,8 +26,6 @@ class MainActivityAdapter internal constructor(
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
 
     private var totalAllocationAmount = 0
-
-    private val listAllocationItem = ArrayList<AllocationItem>()
 
     fun setListSalaryAllocations(listAllocation: List<SalaryAllocation>) {
         val diffCallback = AllocationDiffCallback(this.listSalaryAllocations, listAllocation)
@@ -37,11 +38,6 @@ class MainActivityAdapter internal constructor(
 
     fun setAllocationTotalAmount(amount: Int) {
         this.totalAllocationAmount = amount
-    }
-
-    fun setAllocationItemList(allocationItemList: List<AllocationItem>) {
-        this.listAllocationItem.clear()
-        this.listAllocationItem.addAll(allocationItemList)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainActivityViewHolder {
@@ -68,19 +64,36 @@ class MainActivityAdapter internal constructor(
                         it
                     )
                 }
-                tvAllocationTotalSpend.text = totalAllocationAmount.toString()
+                tvAllocationTotalSpend.text =
+                    currencyFormatterIDR.getCurrency(totalAllocationAmount)
                 btnAddAllocationItem.setOnClickListener {
                     onClickButtonItem.onButtonOnClick()
                 }
 
-                val adapter = AllocationItemAdapter(activity)
+                val adapter = AllocationItemAdapter()
 
-                rvItemAllocation.layoutManager = LinearLayoutManager(activity.applicationContext)
+                val keuangankuViewModel: KeuangankuViewModel =
+                    obtainViewModel(context as AppCompatActivity)
+                keuangankuViewModel.getAllAllocationItem().observe(context, {
+                    if (it != null) {
+                        adapter.setListAllocationItem(it)
+                        keuangankuViewModel.setAllocationList(it)
+                    }
+                })
+
+                rvItemAllocation.layoutManager = LinearLayoutManager(context)
                 rvItemAllocation.setHasFixedSize(true)
                 rvItemAllocation.adapter = adapter
             }
         }
     }
+
+    private fun obtainViewModel(activity: AppCompatActivity): KeuangankuViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory).get(KeuangankuViewModel::class.java)
+    }
+
+
 }
 
 interface OnClickButtonItem {

@@ -1,6 +1,5 @@
 package com.app.keuanganku.ui
 
-import android.app.Activity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -11,9 +10,9 @@ import com.app.keuanganku.data.helper.CurrencyFormatterIDR
 import com.app.keuanganku.databinding.ItemAllocationBinding
 import com.app.keuanganku.ui.AllocationItemAdapter.AllocationItemViewHolder
 
-class AllocationItemAdapter internal constructor(
-    private val activity: Activity
-) : RecyclerView.Adapter<AllocationItemViewHolder>() {
+class AllocationItemAdapter internal constructor() :
+    RecyclerView.Adapter<AllocationItemViewHolder>() {
+
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
 
     private val listAllocationItems = ArrayList<AllocationItem>()
@@ -40,12 +39,13 @@ class AllocationItemAdapter internal constructor(
 
     override fun getItemCount(): Int = listAllocationItems.size
 
-    class AllocationItemViewHolder(private val binding: ItemAllocationBinding) :
+    inner class AllocationItemViewHolder(private val binding: ItemAllocationBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(allocationItem: AllocationItem) {
             with(binding) {
                 tvItemName.text = allocationItem.title
-                tvItemAmount.text = allocationItem.amount.toString()
+                tvItemAmount.text =
+                    allocationItem.amount?.let { currencyFormatterIDR.getCurrency(it) }
             }
         }
     }

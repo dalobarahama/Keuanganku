@@ -36,8 +36,6 @@ class MainActivity : AppCompatActivity(), OnClickButtonItem {
 
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
 
-    private val totalAllocation: TotalAllocation = TotalAllocation()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,7 +43,7 @@ class MainActivity : AppCompatActivity(), OnClickButtonItem {
         setContentView(binding?.root)
 
         mainActivityAdapter = MainActivityAdapter(this, this)
-        allocationItemAdapter = AllocationItemAdapter(this)
+        allocationItemAdapter = AllocationItemAdapter()
 
         keuangankuViewModel = obtainViewModel(this)
         keuangankuViewModel.getSalary().observe(this, salaryObserver)
@@ -84,8 +82,6 @@ class MainActivity : AppCompatActivity(), OnClickButtonItem {
     private val salaryAllocationObserver = Observer<List<SalaryAllocation>> { salaryAllocation ->
         if (salaryAllocation != null) {
             mainActivityAdapter.setListSalaryAllocations(salaryAllocation)
-
-            keuangankuViewModel.setAllocationList(salaryAllocation)
         }
     }
 
@@ -96,7 +92,7 @@ class MainActivity : AppCompatActivity(), OnClickButtonItem {
 
     private val salaryAllocationItemObserver = Observer<List<AllocationItem>> { allocationItem ->
         if (allocationItem != null) {
-            allocationItemAdapter.setListAllocationItem(allocationItem)
+            keuangankuViewModel.setAllocationList(allocationItem)
         }
     }
 
