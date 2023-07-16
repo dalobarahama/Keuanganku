@@ -20,17 +20,14 @@ abstract class DatabaseKeuanganku : RoomDatabase() {
         @Volatile
         private var INSTANCE: DatabaseKeuanganku? = null
 
-        @JvmStatic
-        fun getDatabase(context: Context): DatabaseKeuanganku {
-            if (INSTANCE == null) {
-                synchronized(DatabaseKeuanganku::class.java) {
-                    INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        DatabaseKeuanganku::class.java, "databaseKeuanganku"
-                    ).build()
-                }
+        fun getInstance(context: Context): DatabaseKeuanganku = INSTANCE ?: synchronized(this) {
+            Room.databaseBuilder(
+                context.applicationContext,
+                DatabaseKeuanganku::class.java,
+                "databaseKeuanganku.db"
+            ).build().apply {
+                INSTANCE = this
             }
-            return INSTANCE as DatabaseKeuanganku
         }
     }
 }

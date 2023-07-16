@@ -15,7 +15,7 @@ class Repository(application: Application) {
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
 
     init {
-        val databaseKeuanganku = DatabaseKeuanganku.getDatabase(application)
+        val databaseKeuanganku = DatabaseKeuanganku.getInstance(application)
         keuangankuDao = databaseKeuanganku.dao()
     }
 

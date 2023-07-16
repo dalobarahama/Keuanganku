@@ -19,9 +19,10 @@ import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
 import com.app.keuanganku.data.helper.TotalAllocation
 import com.app.keuanganku.databinding.ActivityMainBinding
+import com.app.keuanganku.ui.common.BaseActivity
 import com.app.keuanganku.viewmodel.ViewModelFactory
 
-class MainActivity : AppCompatActivity(), OnClickButtonItem {
+class MainActivity : BaseActivity(), OnClickButtonItem {
 
     private var _activityMainBinding: ActivityMainBinding? = null
     private val binding get() = _activityMainBinding
