@@ -15,4 +15,8 @@ class AppModule(val application: Application) {
     @AppScope
     fun localDatabase(application: Application): DatabaseKeuanganku =
         DatabaseKeuanganku.getInstance(application.applicationContext)
+
+    @Provides
+    @AppScope
+    fun keuangankuDao(localDatabase: DatabaseKeuanganku) = localDatabase.dao()
 }

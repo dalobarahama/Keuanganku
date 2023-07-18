@@ -17,10 +17,13 @@ import com.app.keuanganku.data.entity.AllocationItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
-import com.app.keuanganku.data.helper.TotalAllocation
 import com.app.keuanganku.databinding.ActivityMainBinding
 import com.app.keuanganku.ui.common.BaseActivity
+import com.app.keuanganku.usecase.InsertSalaryUseCase
+import com.app.keuanganku.usecase.UpdateSalaryUseCase
 import com.app.keuanganku.viewmodel.ViewModelFactory
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class MainActivity : BaseActivity(), OnClickButtonItem {
 
@@ -28,6 +31,12 @@ class MainActivity : BaseActivity(), OnClickButtonItem {
     private val binding get() = _activityMainBinding
 
     private lateinit var keuangankuViewModel: KeuangankuViewModel
+
+    @Inject
+    lateinit var insertSalaryUseCase: InsertSalaryUseCase
+
+    @Inject
+    lateinit var updateSalaryUseCase: UpdateSalaryUseCase
 
     private var salaryIsNull = true
     private lateinit var salaryEntityFromDB: SalaryEntity
@@ -38,6 +47,7 @@ class MainActivity : BaseActivity(), OnClickButtonItem {
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        injector.inject(this)
         super.onCreate(savedInstanceState)
 
         _activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -206,14 +216,16 @@ class MainActivity : BaseActivity(), OnClickButtonItem {
     }
 
     private fun saveSalary(salary: String) {
-        val salaryEntity: SalaryEntity
+        coroutineScope.launch {
+            val salaryEntity: SalaryEntity
 
-        if (salaryIsNull) {
-            salaryEntity = SalaryEntity(null, salary.toInt())
-            keuangankuViewModel.insertSalary(salaryEntity)
-        } else {
-            salaryEntityFromDB.salary = salary.toInt()
-            keuangankuViewModel.updateSalary(salaryEntityFromDB)
+            if (salaryIsNull) {
+                salaryEntity = SalaryEntity(null, salary.toInt())
+                insertSalaryUseCase.insertSalary(salaryEntity)
+            } else {
+                salaryEntityFromDB.salary = salary.toInt()
+                updateSalaryUseCase.updateSalary(salaryEntityFromDB)
+            }
         }
     }
 
