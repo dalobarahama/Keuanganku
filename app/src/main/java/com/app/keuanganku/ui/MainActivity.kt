@@ -3,6 +3,7 @@ package com.app.keuanganku.ui
 import android.app.Dialog
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -19,6 +20,7 @@ import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
 import com.app.keuanganku.databinding.ActivityMainBinding
 import com.app.keuanganku.ui.common.BaseActivity
+import com.app.keuanganku.usecase.GetSalaryUseCase
 import com.app.keuanganku.usecase.InsertSalaryUseCase
 import com.app.keuanganku.usecase.UpdateSalaryUseCase
 import com.app.keuanganku.viewmodel.ViewModelFactory
@@ -37,6 +39,9 @@ class MainActivity : BaseActivity(), OnClickButtonItem {
 
     @Inject
     lateinit var updateSalaryUseCase: UpdateSalaryUseCase
+
+    @Inject
+    lateinit var getSalaryUseCase: GetSalaryUseCase
 
     private var salaryIsNull = true
     private lateinit var salaryEntityFromDB: SalaryEntity
@@ -57,10 +62,24 @@ class MainActivity : BaseActivity(), OnClickButtonItem {
         allocationItemAdapter = AllocationItemAdapter()
 
         keuangankuViewModel = obtainViewModel(this)
-        keuangankuViewModel.getSalary().observe(this, salaryObserver)
         keuangankuViewModel.getAllSalaryAllocation().observe(this, salaryAllocationObserver)
         keuangankuViewModel.getTotalAllocation().observe(this, salaryAllocationTotalAmountObserver)
         keuangankuViewModel.getAllAllocationItem().observe(this, salaryAllocationItemObserver)
+
+        coroutineScope.launch {
+            if (getSalaryUseCase.getSalary() != null) {
+                salaryIsNull = false
+                binding?.tvSalary?.text = "Salary ${
+                    getSalaryUseCase.getSalary().salary?.let {
+                        currencyFormatterIDR.getCurrency(
+                            it
+                        )
+                    }
+                }"
+                Log.d("MainActivity", "onCreate: ${getSalaryUseCase.getSalary().salary.toString()}")
+                salaryEntityFromDB = getSalaryUseCase.getSalary()
+            }
+        }
 
         binding?.btnAddSalary?.setOnClickListener {
             showDialogInputSalary()
