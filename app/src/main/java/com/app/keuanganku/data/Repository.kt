@@ -19,7 +19,7 @@ class Repository(application: Application) {
         keuangankuDao = databaseKeuanganku.dao()
     }
 
-    fun getSalary(): LiveData<SalaryEntity> = keuangankuDao.getSalary()
+//    fun getSalary(): LiveData<SalaryEntity> = keuangankuDao.getSalary()
 
     fun getAllSalaryAllocation(): LiveData<List<SalaryAllocation>> =
         keuangankuDao.getAllSalaryAllocation()

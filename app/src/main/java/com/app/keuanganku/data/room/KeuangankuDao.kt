@@ -19,7 +19,7 @@ interface KeuangankuDao {
     fun updateSalary(salary: SalaryEntity)
 
     @Query("SELECT * FROM salary_entity")
-    fun getSalary(): LiveData<SalaryEntity>
+    fun getSalary(): SalaryEntity
 
     @Insert
     fun insertSalaryAllocation(salaryAllocation: SalaryAllocation)

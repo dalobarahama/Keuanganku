@@ -22,7 +22,7 @@ class KeuangankuViewModel(application: Application) : ViewModel() {
         repository.updateSalary(salary)
     }
 
-    fun getSalary(): LiveData<SalaryEntity> = repository.getSalary()
+//    fun getSalary(): LiveData<SalaryEntity> = repository.getSalary()
 
     fun insertSalaryAllocation(salaryAllocation: SalaryAllocation) {
         repository.insertSalaryAllocation(salaryAllocation)
