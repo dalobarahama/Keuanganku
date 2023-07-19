@@ -9,7 +9,7 @@ class UpdateSalaryUseCase(private val keuangankuDao: KeuangankuDao) {
 
     suspend fun updateSalary(salaryEntity: SalaryEntity){
         withContext(Dispatchers.IO) {
-            keuangankuDao.insertSalary(salaryEntity)
+            keuangankuDao.updateSalary(salaryEntity)
         }
     }
 
