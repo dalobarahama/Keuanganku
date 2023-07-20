@@ -1,43 +1,81 @@
 package com.app.keuanganku.ui
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
-import com.app.keuanganku.R
-import com.app.keuanganku.viewmodel.ViewModelFactory
+import com.app.keuanganku.common.di.presentation.PresentationModule
+import com.app.keuanganku.data.entity.SalaryEntity
+import com.app.keuanganku.ui.common.BaseActivity
+import com.app.keuanganku.usecase.InsertSalaryUseCase
+import com.app.keuanganku.usecase.UpdateSalaryUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CustomDialog : DialogFragment() {
+class CustomDialog(private val title: String, private val salary: String) : DialogFragment(),
+    CustomDialogViewMvcImpl.Listener {
 
-    private lateinit var keuangankuViewModel: KeuangankuViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        dialog?.window?.setBackgroundDrawableResource(R.drawable.round_corner)
-        return inflater.inflate(R.layout.dialog_layout, container, false)
+    private val presentationComponent by lazy {
+        (requireActivity() as BaseActivity).activityComponent.newPresentationComponent(
+            PresentationModule()
+        )
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private val injector get() = presentationComponent
 
+    @Inject
+    lateinit var insertSalaryUseCase: InsertSalaryUseCase
+
+    @Inject
+    lateinit var updateSalaryUseCase: UpdateSalaryUseCase
+
+    private lateinit var viewMvc: CustomDialogViewMvcImpl
+
+    val coroutineScope get() = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        injector.inject(this)
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        viewMvc = CustomDialogViewMvcImpl(layoutInflater, null)
+
+        viewMvc.setTitle(title)
+        viewMvc.setEditTextSalary(salary)
+
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(viewMvc.rootView)
+
+        return dialog
     }
 
     override fun onStart() {
         super.onStart()
-        val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
-        val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
-        dialog?.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        viewMvc.registerListener(this)
     }
 
-    private fun obtainViewModel(activity: FragmentActivity): KeuangankuViewModel {
-        val factory = ViewModelFactory.getInstance(activity.application)
-        return ViewModelProvider(activity, factory).get(KeuangankuViewModel::class.java)
+    override fun onStop() {
+        super.onStop()
+        viewMvc.unregisterListener(this)
     }
+
+    override fun onClickPositiveButton(salaryEntity: SalaryEntity, salaryIsNull: Boolean) {
+        coroutineScope.launch {
+            if (salaryIsNull) {
+                insertSalaryUseCase.insertSalary(salaryEntity)
+            } else {
+                updateSalaryUseCase.updateSalary(salaryEntity)
+            }
+        }
+
+        dismiss()
+    }
+
+    override fun onClickNegativeButton() {
+        dismiss()
+    }
+
 }

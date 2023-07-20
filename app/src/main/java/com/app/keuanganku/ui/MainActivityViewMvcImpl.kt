@@ -21,6 +21,7 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
 
     interface Listener {
         fun inputSalary(salaryEntity: SalaryEntity, salaryIsNull: Boolean)
+        fun addSalary(salary: Int)
     }
 
     private val listeners = HashSet<Listener>()
@@ -42,7 +43,15 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
         val rvAllocation = findViewById<RecyclerView>(R.id.rv_allocation)
 
         btnAddSalary.setOnClickListener {
-            showDialogInputSalary()
+//            showDialogInputSalary()
+            for (listener in listeners) {
+                if (!salaryIsNull) {
+                    salaryEntityFromDB.salary?.let { it1 -> listener.addSalary(it1) }
+                } else {
+                    listener.addSalary(0)
+                }
+
+            }
         }
 
         btnAddSalaryAllocation.setOnClickListener {
@@ -81,7 +90,6 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
                 )
             }
         }"
-        Log.d("MainActivity", "onCreate: ${salaryEntity.salary.toString()}")
         salaryEntityFromDB = salaryEntity
     }
 

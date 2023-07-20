@@ -1,6 +1,7 @@
 package com.app.keuanganku.ui
 
 import android.os.Bundle
+import android.util.Log
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.ui.common.BaseActivity
 import com.app.keuanganku.usecase.GetSalaryUseCase
@@ -171,5 +172,11 @@ class MainActivity : BaseActivity(), MainActivityViewMvcImpl.Listener {
         }
 
         setSalary()
+    }
+
+    override fun addSalary(salary: Int) {
+        val customDialog = CustomDialog("Input Salary", salary.toString())
+
+        customDialog.show(supportFragmentManager, "inputSalary")
     }
 }
