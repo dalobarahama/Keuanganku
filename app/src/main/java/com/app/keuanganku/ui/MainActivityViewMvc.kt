@@ -1,10 +1,13 @@
 package com.app.keuanganku.ui
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewParent
+import com.app.keuanganku.data.entity.SalaryEntity
+import com.app.keuanganku.ui.common.ObservableViewMvc
 
-interface MainActivityViewMvc {
+interface MainActivityViewMvc : ObservableViewMvc<MainActivityViewMvc.Listener> {
+
+    interface Listener {
+        fun inputSalary(salaryEntity: SalaryEntity, salaryIsNull: Boolean)
+        fun addSalary(salary: Int)
+    }
 
 }

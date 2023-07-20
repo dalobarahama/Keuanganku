@@ -1,7 +1,6 @@
 package com.app.keuanganku.ui
 
 import android.os.Bundle
-import android.util.Log
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.ui.common.BaseActivity
 import com.app.keuanganku.usecase.GetSalaryUseCase
@@ -10,7 +9,7 @@ import com.app.keuanganku.usecase.UpdateSalaryUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MainActivity : BaseActivity(), MainActivityViewMvcImpl.Listener {
+class MainActivity : BaseActivity(), MainActivityViewMvc.Listener {
 
     private lateinit var viewMvc: MainActivityViewMvcImpl
 
@@ -146,7 +145,7 @@ class MainActivity : BaseActivity(), MainActivityViewMvcImpl.Listener {
         viewMvc.unregisterListener(this)
     }
 
-    private fun setSalary(){
+    private fun setSalary() {
         coroutineScope.launch {
             if (getSalaryUseCase.getSalary() != null) {
                 viewMvc.setSalary(getSalaryUseCase.getSalary())

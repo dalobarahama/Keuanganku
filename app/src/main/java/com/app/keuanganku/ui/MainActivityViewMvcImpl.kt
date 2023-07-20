@@ -2,9 +2,7 @@ package com.app.keuanganku.ui
 
 import android.app.Dialog
 import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
@@ -15,18 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.keuanganku.R
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
+import com.app.keuanganku.ui.common.BaseObservableViewMvc
 
 class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?) :
+    BaseObservableViewMvc<MainActivityViewMvc.Listener>(),
+    MainActivityViewMvc,
     OnClickButtonItem {
-
-    interface Listener {
-        fun inputSalary(salaryEntity: SalaryEntity, salaryIsNull: Boolean)
-        fun addSalary(salary: Int)
-    }
-
-    private val listeners = HashSet<Listener>()
-
-    private val rootView: View = layoutInflater.inflate(R.layout.activity_main, parent, false)
 
     private var salaryIsNull = true
     private lateinit var salaryEntityFromDB: SalaryEntity
@@ -35,7 +27,9 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
 
     init {
-        mainActivityAdapter = MainActivityAdapter(getRootView().context, this)
+        setRootView(layoutInflater.inflate(R.layout.activity_main, parent, false))
+
+        mainActivityAdapter = MainActivityAdapter(getContext(), this)
         allocationItemAdapter = AllocationItemAdapter()
 
         val btnAddSalary = findViewById<Button>(R.id.btn_add_salary)
@@ -44,7 +38,7 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
 
         btnAddSalary.setOnClickListener {
 //            showDialogInputSalary()
-            for (listener in listeners) {
+            for (listener in getListeners()) {
                 if (!salaryIsNull) {
                     salaryEntityFromDB.salary?.let { it1 -> listener.addSalary(it1) }
                 } else {
@@ -55,28 +49,12 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
         }
 
         btnAddSalaryAllocation.setOnClickListener {
-//            showDialogInputSalaryAllocation()
+
         }
 
-        rvAllocation.layoutManager = LinearLayoutManager(getRootView().context)
+        rvAllocation.layoutManager = LinearLayoutManager(getContext())
         rvAllocation.setHasFixedSize(true)
         rvAllocation.adapter = mainActivityAdapter
-    }
-
-    fun getRootView(): View {
-        return rootView
-    }
-
-    private fun <T : View?> findViewById(id: Int): T {
-        return getRootView().findViewById<T>(id)
-    }
-
-    fun registerListener(listener: Listener) {
-        listeners.add(listener)
-    }
-
-    fun unregisterListener(listener: Listener) {
-        listeners.remove(listener)
     }
 
     fun setSalary(salaryEntity: SalaryEntity) {
@@ -94,7 +72,7 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
     }
 
     override fun onButtonOnClick() {
-        Toast.makeText(getRootView().context, "Clicked", Toast.LENGTH_SHORT)
+        Toast.makeText(getContext(), "Clicked", Toast.LENGTH_SHORT)
             .show()
     }
 
@@ -125,7 +103,7 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
                 salaryEntity.salary = editTextInputSalary.text.toString().toInt()
             }
 
-            for (listener in listeners) {
+            for (listener in getListeners()) {
                 listener.inputSalary(salaryEntity, salaryIsNull)
             }
 
