@@ -1,6 +1,11 @@
 package com.app.keuanganku.ui.common.dialog
 
-class CustomDialogEvent(private val clickedButton: Button) {
+import com.app.keuanganku.data.entity.SalaryEntity
+
+class CustomDialogEvent(
+    private val clickedButton: Button,
+    private val salaryEntity: SalaryEntity? = null,
+) {
 
     enum class Button {
         POSITIVE,
@@ -9,6 +14,10 @@ class CustomDialogEvent(private val clickedButton: Button) {
 
     fun getClickedButton(): Button {
         return clickedButton
+    }
+
+    fun getSalaryEntity(): SalaryEntity? {
+        return salaryEntity
     }
 
 }
