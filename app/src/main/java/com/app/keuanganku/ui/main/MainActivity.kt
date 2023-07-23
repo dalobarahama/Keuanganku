@@ -5,6 +5,7 @@ import android.widget.Toast
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.ui.CustomDialog
 import com.app.keuanganku.ui.common.BaseActivity
+import com.app.keuanganku.ui.common.ViewMvcFactory
 import com.app.keuanganku.ui.common.dialog.CustomDialogEvent
 import com.app.keuanganku.ui.common.dialog.DialogEventBus
 import com.app.keuanganku.usecase.GetSalaryUseCase
@@ -14,13 +15,16 @@ import javax.inject.Inject
 
 class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBus.Listener {
 
-    private lateinit var viewMvc: MainActivityViewMvcImpl
+    private lateinit var viewMvc: MainActivityViewMvc
 
     @Inject
     lateinit var updateSalaryUseCase: UpdateSalaryUseCase
 
     @Inject
     lateinit var getSalaryUseCase: GetSalaryUseCase
+
+    @Inject
+    lateinit var viewMvcFactory: ViewMvcFactory
 
     @Inject
     lateinit var dialogEventBus: DialogEventBus
@@ -33,7 +37,7 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
 
         getSalaryFromUseCase()
 
-        viewMvc = MainActivityViewMvcImpl(layoutInflater, null)
+        viewMvc = viewMvcFactory.getMainActivityViewMvc(null)
         setContentView(viewMvc.getRootView())
     }
 
@@ -65,6 +69,10 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
         val customDialog = CustomDialog("Input Salary", salaryEntity)
 
         customDialog.show(supportFragmentManager, "inputSalary")
+    }
+
+    override fun onSalaryAllocationClicked() {
+        Toast.makeText(this, "Salary Allocation Clicked", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDialogEvent(event: Any) {

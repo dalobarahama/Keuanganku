@@ -1,6 +1,7 @@
 package com.app.keuanganku.common.di.activity
 
 import androidx.appcompat.app.AppCompatActivity
+import com.app.keuanganku.ui.common.ViewMvcFactory
 import dagger.Module
 import dagger.Provides
 
@@ -10,4 +11,7 @@ class ActivityModule(val activity: AppCompatActivity) {
     @Provides
     fun activity(): AppCompatActivity = activity
 
+    @Provides
+    @ActivityScope
+    fun viewMvcFactory() = ViewMvcFactory(activity.layoutInflater)
 }

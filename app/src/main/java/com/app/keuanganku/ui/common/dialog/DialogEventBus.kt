@@ -1,6 +1,6 @@
 package com.app.keuanganku.ui.common.dialog
 
-import com.app.keuanganku.ui.common.BaseObservableViewMvc
+import com.app.keuanganku.ui.common.viewmvc.BaseObservableViewMvc
 
 class DialogEventBus : BaseObservableViewMvc<DialogEventBus.Listener>() {
 

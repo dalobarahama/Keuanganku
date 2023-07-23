@@ -11,7 +11,7 @@ import com.app.keuanganku.R
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
 import com.app.keuanganku.ui.AllocationItemAdapter
-import com.app.keuanganku.ui.common.BaseObservableViewMvc
+import com.app.keuanganku.ui.common.viewmvc.BaseObservableViewMvc
 
 class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?) :
     BaseObservableViewMvc<MainActivityViewMvc.Listener>(),
@@ -39,7 +39,9 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
         }
 
         btnAddSalaryAllocation.setOnClickListener {
-
+            for (listener in getListeners()) {
+                listener.onSalaryAllocationClicked()
+            }
         }
 
         rvAllocation.layoutManager = LinearLayoutManager(getContext())
@@ -47,7 +49,7 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
         rvAllocation.adapter = mainActivityAdapter
     }
 
-    fun setSalary(salaryEntity: SalaryEntity) {
+    override fun setSalary(salaryEntity: SalaryEntity) {
         val tvSalary = findViewById<TextView>(R.id.tv_salary)
 
         tvSalary.text = "Salary ${
