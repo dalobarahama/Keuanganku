@@ -3,7 +3,6 @@ package com.app.keuanganku.viewmodel
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.app.keuanganku.ui.KeuangankuViewModel
 
 class ViewModelFactory private constructor(private val application: Application) :
     ViewModelProvider.NewInstanceFactory() {

@@ -1,4 +1,4 @@
-package com.app.keuanganku.ui
+package com.app.keuanganku.ui.main
 
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.ui.common.ObservableViewMvc

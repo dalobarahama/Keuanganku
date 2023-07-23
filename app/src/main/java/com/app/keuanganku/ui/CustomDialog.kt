@@ -33,7 +33,7 @@ class CustomDialog(private val title: String, private val salary: String) : Dial
 
     private lateinit var viewMvc: CustomDialogViewMvcImpl
 
-    val coroutineScope get() = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val coroutineScope get() = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injector.inject(this)

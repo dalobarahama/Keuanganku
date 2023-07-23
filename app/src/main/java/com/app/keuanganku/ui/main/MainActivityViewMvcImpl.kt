@@ -1,4 +1,4 @@
-package com.app.keuanganku.ui
+package com.app.keuanganku.ui.main
 
 import android.app.Dialog
 import android.text.InputType
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.keuanganku.R
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
+import com.app.keuanganku.ui.AllocationItemAdapter
 import com.app.keuanganku.ui.common.BaseObservableViewMvc
 
 class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?) :

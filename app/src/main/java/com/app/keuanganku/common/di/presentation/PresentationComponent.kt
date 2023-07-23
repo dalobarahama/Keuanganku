@@ -1,7 +1,7 @@
 package com.app.keuanganku.common.di.presentation
 
 import com.app.keuanganku.ui.CustomDialog
-import com.app.keuanganku.ui.MainActivity
+import com.app.keuanganku.ui.main.MainActivity
 import dagger.Subcomponent
 
 @PresentationScope

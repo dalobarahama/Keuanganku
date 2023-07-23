@@ -1,4 +1,4 @@
-package com.app.keuanganku.ui
+package com.app.keuanganku.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.LiveData

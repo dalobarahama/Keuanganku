@@ -1,4 +1,4 @@
-package com.app.keuanganku.ui
+package com.app.keuanganku.ui.main
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,12 +8,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.app.keuanganku.data.entity.AllocationItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.helper.AllocationDiffCallback
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
 import com.app.keuanganku.databinding.ItemSalaryAllocationBinding
-import com.app.keuanganku.ui.MainActivityAdapter.MainActivityViewHolder
+import com.app.keuanganku.ui.AllocationItemAdapter
+import com.app.keuanganku.viewmodel.KeuangankuViewModel
+import com.app.keuanganku.ui.main.MainActivityAdapter.MainActivityViewHolder
 import com.app.keuanganku.viewmodel.ViewModelFactory
 
 class MainActivityAdapter internal constructor(
@@ -71,15 +72,6 @@ class MainActivityAdapter internal constructor(
                 }
 
                 val adapter = AllocationItemAdapter()
-
-                val keuangankuViewModel: KeuangankuViewModel =
-                    obtainViewModel(context as AppCompatActivity)
-                keuangankuViewModel.getAllAllocationItem().observe(context, {
-                    if (it != null) {
-                        adapter.setListAllocationItem(it)
-                        keuangankuViewModel.setAllocationList(it)
-                    }
-                })
 
                 rvItemAllocation.layoutManager = LinearLayoutManager(context)
                 rvItemAllocation.setHasFixedSize(true)
