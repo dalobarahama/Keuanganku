@@ -22,12 +22,15 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
     private val allocationItemAdapter: AllocationItemAdapter
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
 
+    private val tvSalary: TextView
+
     init {
         setRootView(layoutInflater.inflate(R.layout.activity_main, parent, false))
 
         mainActivityAdapter = MainActivityAdapter(getContext(), this)
         allocationItemAdapter = AllocationItemAdapter()
 
+        tvSalary = findViewById(R.id.tv_salary)
         val btnAddSalary = findViewById<Button>(R.id.btn_add_salary)
         val btnAddSalaryAllocation = findViewById<Button>(R.id.btn_add_salary_allocation)
         val rvAllocation = findViewById<RecyclerView>(R.id.rv_allocation)
@@ -50,8 +53,6 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
     }
 
     override fun setSalary(salaryEntity: SalaryEntity) {
-        val tvSalary = findViewById<TextView>(R.id.tv_salary)
-
         tvSalary.text = "Salary ${
             salaryEntity.salary?.let {
                 currencyFormatterIDR.getCurrency(

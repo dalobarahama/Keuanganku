@@ -3,8 +3,6 @@ package com.app.keuanganku.ui.main
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,9 +11,7 @@ import com.app.keuanganku.data.helper.AllocationDiffCallback
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
 import com.app.keuanganku.databinding.ItemSalaryAllocationBinding
 import com.app.keuanganku.ui.AllocationItemAdapter
-import com.app.keuanganku.viewmodel.KeuangankuViewModel
 import com.app.keuanganku.ui.main.MainActivityAdapter.MainActivityViewHolder
-import com.app.keuanganku.viewmodel.ViewModelFactory
 
 class MainActivityAdapter internal constructor(
     private val context: Context,
@@ -79,13 +75,6 @@ class MainActivityAdapter internal constructor(
             }
         }
     }
-
-    private fun obtainViewModel(activity: AppCompatActivity): KeuangankuViewModel {
-        val factory = ViewModelFactory.getInstance(activity.application)
-        return ViewModelProvider(activity, factory).get(KeuangankuViewModel::class.java)
-    }
-
-
 }
 
 interface OnClickButtonItem {

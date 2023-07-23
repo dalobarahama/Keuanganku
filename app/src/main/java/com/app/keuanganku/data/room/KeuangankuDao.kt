@@ -28,7 +28,7 @@ interface KeuangankuDao {
     fun updateSalaryAllocation(salaryAllocation: SalaryAllocation)
 
     @Query("SELECT * FROM salary_allocation")
-    fun getAllSalaryAllocation(): LiveData<List<SalaryAllocation>>
+    fun getAllSalaryAllocation(): List<SalaryAllocation>
 
     @Insert
     fun insertAllocationItem(allocationItem: AllocationItem)
@@ -37,5 +37,5 @@ interface KeuangankuDao {
     fun updateAllocationItem(allocationItem: AllocationItem)
 
     @Query("SELECT * FROM allocation_item")
-    fun getAllSAllocationItem(): LiveData<List<AllocationItem>>
+    fun getAllSAllocationItem(): List<AllocationItem>
 }
