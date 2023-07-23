@@ -16,18 +16,17 @@ class CustomDialogViewMvcImpl(
 ) {
 
     interface Listener {
-        fun onClickPositiveButton(salaryEntity: SalaryEntity, salaryIsNull: Boolean)
+        fun onClickPositiveButton(salaryEntity: SalaryEntity)
         fun onClickNegativeButton()
     }
 
-    val rootView = layoutInflater.inflate(R.layout.dialog_layout, parent, false)
+    val rootView: View = layoutInflater.inflate(R.layout.dialog_layout, parent, false)
 
     private val listeners = HashSet<Listener>()
 
     private var textViewTitle: TextView
     private var editTextInputSalary: EditText
-    private var salaryIsNull = true
-    private lateinit var salaryEntityFromDB: SalaryEntity
+    private lateinit var salaryEntity: SalaryEntity
 
     init {
 
@@ -40,17 +39,10 @@ class CustomDialogViewMvcImpl(
         editTextInputSalary.inputType = InputType.TYPE_CLASS_NUMBER
 
         buttonSave.setOnClickListener {
-            val salaryEntity: SalaryEntity
-
-            if (salaryIsNull) {
-                salaryEntity = SalaryEntity(null, editTextInputSalary.text.toString().toInt())
-            } else {
-                salaryEntity = salaryEntityFromDB
-                salaryEntity.salary = editTextInputSalary.text.toString().toInt()
-            }
+            salaryEntity.salary = editTextInputSalary.text.toString().toInt()
 
             for (listener in listeners) {
-                listener.onClickPositiveButton(salaryEntity, salaryIsNull)
+                listener.onClickPositiveButton(salaryEntity)
             }
         }
 
@@ -82,7 +74,7 @@ class CustomDialogViewMvcImpl(
         editTextInputSalary.setText(salary)
     }
 
-    fun setSalaryIsNull(salaryIsNull: Boolean) {
-        this.salaryIsNull = salaryIsNull
+    fun setSalaryEntity(salaryEntity: SalaryEntity) {
+        this.salaryEntity = salaryEntity
     }
 }

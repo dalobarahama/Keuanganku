@@ -4,9 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.app.keuanganku.data.entity.AllocationItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Database(
     entities = [SalaryEntity::class, SalaryAllocation::class, AllocationItem::class],
@@ -25,7 +29,15 @@ abstract class DatabaseKeuanganku : RoomDatabase() {
                 context.applicationContext,
                 DatabaseKeuanganku::class.java,
                 "databaseKeuanganku.db"
-            ).build().apply {
+            ).addCallback(object : Callback() {
+                override fun onCreate(db: SupportSQLiteDatabase) {
+                    super.onCreate(db)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val keuangankuDao = getInstance(context).dao()
+                        keuangankuDao.insertSalary(SalaryEntity(null, 0))
+                    }
+                }
+            }).build().apply {
                 INSTANCE = this
             }
         }

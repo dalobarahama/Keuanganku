@@ -2,6 +2,7 @@ package com.app.keuanganku.common.di.app
 
 import android.app.Application
 import com.app.keuanganku.data.room.DatabaseKeuanganku
+import com.app.keuanganku.ui.common.dialog.DialogEventBus
 import dagger.Module
 import dagger.Provides
 
@@ -19,4 +20,8 @@ class AppModule(val application: Application) {
     @Provides
     @AppScope
     fun keuangankuDao(localDatabase: DatabaseKeuanganku) = localDatabase.dao()
+
+    @Provides
+    @AppScope
+    fun dialogEventBus() = DialogEventBus()
 }
