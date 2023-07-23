@@ -1,4 +1,4 @@
-package com.app.keuanganku.ui.common
+package com.app.keuanganku.ui.common.viewmvc
 
 interface ObservableViewMvc<ListenerType> : ViewMvc {
 

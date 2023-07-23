@@ -1,4 +1,4 @@
-package com.app.keuanganku.ui.common
+package com.app.keuanganku.ui.common.viewmvc
 
 import android.content.Context
 import android.view.View
