@@ -31,7 +31,7 @@ class DialogAddAllocation : BaseCustomDialog(), BaseCustomDialogViewMvc.Listener
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        viewMvc = viewMvcFactory.getDialogAddAllocation(null)
+        viewMvc = viewMvcFactory.getDialogAddAllocationViewMvc(null)
         viewMvc.setTitle("Add Allocation")
 
         val dialog = Dialog(requireContext())

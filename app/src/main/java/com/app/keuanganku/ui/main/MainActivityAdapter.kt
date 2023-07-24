@@ -1,26 +1,25 @@
 package com.app.keuanganku.ui.main
 
-import android.content.Context
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.helper.AllocationDiffCallback
-import com.app.keuanganku.data.helper.CurrencyFormatterIDR
-import com.app.keuanganku.databinding.ItemSalaryAllocationBinding
-import com.app.keuanganku.ui.AllocationItemAdapter
+import com.app.keuanganku.ui.common.ViewMvcFactory
 import com.app.keuanganku.ui.main.MainActivityAdapter.MainActivityViewHolder
+import com.app.keuanganku.ui.main.salaryallocationitem.SalaryAllocationItemViewMvc
 
-class MainActivityAdapter internal constructor(
-    private val context: Context,
-    private val onClickButtonItem: OnClickButtonItem,
+class MainActivityAdapter(
+    val listener: Listener,
+    val viewMvcFactory: ViewMvcFactory,
 ) :
-    RecyclerView.Adapter<MainActivityViewHolder>() {
-    private val listSalaryAllocations = ArrayList<SalaryAllocation>()
+    RecyclerView.Adapter<MainActivityViewHolder>(), SalaryAllocationItemViewMvc.Listener {
 
-    private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
+    interface Listener {
+        fun onItemClicked(salaryAllocation: SalaryAllocation)
+    }
+
+    private val listSalaryAllocations = ArrayList<SalaryAllocation>()
 
     private var totalAllocationAmount = 0
 
@@ -38,45 +37,23 @@ class MainActivityAdapter internal constructor(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainActivityViewHolder {
-        val binding =
-            ItemSalaryAllocationBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MainActivityViewHolder(binding)
+        val viewMvc = viewMvcFactory.getSalaryAllocationItemViewMvc(parent)
+        viewMvc.registerListener(this)
+        return MainActivityViewHolder(viewMvc)
     }
 
     override fun onBindViewHolder(holder: MainActivityViewHolder, position: Int) {
-        holder.bind(listSalaryAllocations[position])
+        holder.viewMvc.bindSalaryAllocation(listSalaryAllocations[position])
     }
 
     override fun getItemCount(): Int {
         return listSalaryAllocations.size
     }
 
-    inner class MainActivityViewHolder(private val binding: ItemSalaryAllocationBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(salaryAllocation: SalaryAllocation) {
-            with(binding) {
-                tvItemAllocationName.text = salaryAllocation.title
-                tvItemAllocationAmount.text = salaryAllocation.amount?.let {
-                    currencyFormatterIDR.getCurrency(
-                        it
-                    )
-                }
-                tvAllocationTotalSpend.text =
-                    currencyFormatterIDR.getCurrency(totalAllocationAmount)
-                btnAddAllocationItem.setOnClickListener {
-                    onClickButtonItem.onButtonOnClick()
-                }
+    inner class MainActivityViewHolder(val viewMvc: SalaryAllocationItemViewMvc) :
+        RecyclerView.ViewHolder(viewMvc.getRootView())
 
-                val adapter = AllocationItemAdapter()
-
-                rvItemAllocation.layoutManager = LinearLayoutManager(context)
-                rvItemAllocation.setHasFixedSize(true)
-                rvItemAllocation.adapter = adapter
-            }
-        }
+    override fun onItemClicked(salaryAllocation: SalaryAllocation) {
+        listener.onItemClicked(salaryAllocation)
     }
-}
-
-interface OnClickButtonItem {
-    fun onButtonOnClick()
 }

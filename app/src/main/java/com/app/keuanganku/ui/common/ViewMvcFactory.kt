@@ -8,19 +8,25 @@ import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocati
 import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocationViewMvcImpl
 import com.app.keuanganku.ui.main.MainActivityViewMvc
 import com.app.keuanganku.ui.main.MainActivityViewMvcImpl
+import com.app.keuanganku.ui.main.salaryallocationitem.SalaryAllocationItemViewMvc
+import com.app.keuanganku.ui.main.salaryallocationitem.SalaryAllocationItemViewMvcImpl
 
 class ViewMvcFactory(private val layoutInflater: LayoutInflater) {
 
     fun getMainActivityViewMvc(parent: ViewGroup?): MainActivityViewMvc {
-        return MainActivityViewMvcImpl(layoutInflater, parent)
+        return MainActivityViewMvcImpl(layoutInflater, parent, this)
     }
 
     fun getDialogAddSalaryViewMvc(parent: ViewGroup?): DialogAddSalaryViewMvc {
         return DialogAddSalaryViewMvcImpl(layoutInflater, parent)
     }
 
-    fun getDialogAddAllocation(parent: ViewGroup?): DialogAddAllocationViewMvc {
+    fun getDialogAddAllocationViewMvc(parent: ViewGroup?): DialogAddAllocationViewMvc {
         return DialogAddAllocationViewMvcImpl(layoutInflater, parent)
+    }
+
+    fun getSalaryAllocationItemViewMvc(parent: ViewGroup?): SalaryAllocationItemViewMvc {
+        return SalaryAllocationItemViewMvcImpl(layoutInflater, parent)
     }
 
 }

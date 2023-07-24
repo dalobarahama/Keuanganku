@@ -4,19 +4,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.keuanganku.R
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
+import com.app.keuanganku.ui.common.ViewMvcFactory
 import com.app.keuanganku.ui.common.viewmvc.BaseObservableViewMvc
 
-class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?) :
+class MainActivityViewMvcImpl(
+    layoutInflater: LayoutInflater,
+    parent: ViewGroup?,
+    viewMvcFactory: ViewMvcFactory,
+) :
     BaseObservableViewMvc<MainActivityViewMvc.Listener>(),
-    MainActivityViewMvc,
-    OnClickButtonItem {
+    MainActivityViewMvc, MainActivityAdapter.Listener {
 
     private val mainActivityAdapter: MainActivityAdapter
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
@@ -26,7 +29,7 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
     init {
         setRootView(layoutInflater.inflate(R.layout.activity_main, parent, false))
 
-        mainActivityAdapter = MainActivityAdapter(getContext(), this)
+        mainActivityAdapter = MainActivityAdapter(this, viewMvcFactory)
 
         tvSalary = findViewById(R.id.tv_salary)
         val btnAddSalary = findViewById<Button>(R.id.btn_add_salary)
@@ -41,7 +44,7 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
 
         btnAddSalaryAllocation.setOnClickListener {
             for (listener in getListeners()) {
-                listener.onSalaryAllocationClicked()
+                listener.addSalaryAllocation()
             }
         }
 
@@ -64,8 +67,9 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
         mainActivityAdapter.setListSalaryAllocations(salaryAllocations)
     }
 
-    override fun onButtonOnClick() {
-        Toast.makeText(getContext(), "Clicked", Toast.LENGTH_SHORT)
-            .show()
+    override fun onItemClicked(salaryAllocation: SalaryAllocation) {
+        for (listener in getListeners()) {
+            listener.onSalaryAllocationItemClicked(salaryAllocation)
+        }
     }
 }

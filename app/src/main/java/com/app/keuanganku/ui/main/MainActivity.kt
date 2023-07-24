@@ -2,6 +2,7 @@ package com.app.keuanganku.ui.main
 
 import android.os.Bundle
 import android.widget.Toast
+import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.ui.common.BaseActivity
 import com.app.keuanganku.ui.common.ViewMvcFactory
@@ -9,9 +10,9 @@ import com.app.keuanganku.ui.common.dialog.CustomDialogEvent
 import com.app.keuanganku.ui.common.dialog.DialogEventBus
 import com.app.keuanganku.ui.common.dialog.addsalary.DialogAddSalary
 import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocation
-import com.app.keuanganku.usecase.salaryallocation.GetSalaryAllocationUseCase
 import com.app.keuanganku.usecase.salary.GetSalaryUseCase
 import com.app.keuanganku.usecase.salary.UpdateSalaryUseCase
+import com.app.keuanganku.usecase.salaryallocation.GetSalaryAllocationUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -73,10 +74,14 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
         dialogAddSalary.show(supportFragmentManager, "inputSalary")
     }
 
-    override fun onSalaryAllocationClicked() {
+    override fun addSalaryAllocation() {
         val dialogAddAllocation = DialogAddAllocation()
 
         dialogAddAllocation.show(supportFragmentManager, "addAllocation")
+    }
+
+    override fun onSalaryAllocationItemClicked(salaryAllocation: SalaryAllocation) {
+        Toast.makeText(this, "${salaryAllocation.title} clicked", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDialogEvent(event: Any) {
