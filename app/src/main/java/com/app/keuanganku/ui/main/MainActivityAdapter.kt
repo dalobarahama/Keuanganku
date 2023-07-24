@@ -79,5 +79,4 @@ class MainActivityAdapter internal constructor(
 
 interface OnClickButtonItem {
     fun onButtonOnClick()
-
 }

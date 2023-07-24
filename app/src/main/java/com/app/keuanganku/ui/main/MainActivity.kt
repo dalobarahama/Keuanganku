@@ -40,7 +40,7 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
         injector.inject(this)
         super.onCreate(savedInstanceState)
 
-        getSalaryFromUseCase()
+        fetchSalary()
 
         viewMvc = viewMvcFactory.getMainActivityViewMvc(null)
         setContentView(viewMvc.getRootView())
@@ -48,7 +48,8 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
 
     override fun onStart() {
         super.onStart()
-        getSalaryFromUseCase()
+        fetchSalary()
+        fetchSalaryAllocation()
         viewMvc.registerListener(this)
         dialogEventBus.registerListener(this)
     }
@@ -59,15 +60,11 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
         dialogEventBus.unregisterListener(this)
     }
 
-    private fun getSalaryFromUseCase() {
+    private fun fetchSalary() {
         coroutineScope.launch {
             salaryEntity = getSalaryUseCase.getSalary()
-            fetchSalary()
+            viewMvc.setSalary(salaryEntity)
         }
-    }
-
-    private fun fetchSalary() {
-        viewMvc.setSalary(salaryEntity)
     }
 
     override fun inputSalary() {
@@ -97,12 +94,7 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
     private fun fetchSalaryAllocation() {
         coroutineScope.launch {
             if (getSalaryAllocationUseCase.getSalaryAllocation().isNotEmpty()) {
-                val salaryAllocation = getSalaryAllocationUseCase.getSalaryAllocation()[0]
-                Toast.makeText(
-                    this@MainActivity,
-                    "salary allocation ${salaryAllocation.title}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                viewMvc.bindSalaryAllocation(getSalaryAllocationUseCase.getSalaryAllocation())
             }
         }
     }

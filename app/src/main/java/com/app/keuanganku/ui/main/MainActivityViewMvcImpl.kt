@@ -8,9 +8,9 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.keuanganku.R
+import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
-import com.app.keuanganku.ui.AllocationItemAdapter
 import com.app.keuanganku.ui.common.viewmvc.BaseObservableViewMvc
 
 class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?) :
@@ -19,7 +19,6 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
     OnClickButtonItem {
 
     private val mainActivityAdapter: MainActivityAdapter
-    private val allocationItemAdapter: AllocationItemAdapter
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
 
     private val tvSalary: TextView
@@ -28,7 +27,6 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
         setRootView(layoutInflater.inflate(R.layout.activity_main, parent, false))
 
         mainActivityAdapter = MainActivityAdapter(getContext(), this)
-        allocationItemAdapter = AllocationItemAdapter()
 
         tvSalary = findViewById(R.id.tv_salary)
         val btnAddSalary = findViewById<Button>(R.id.btn_add_salary)
@@ -60,6 +58,10 @@ class MainActivityViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?
                 )
             }
         }"
+    }
+
+    override fun bindSalaryAllocation(salaryAllocations: List<SalaryAllocation>) {
+        mainActivityAdapter.setListSalaryAllocations(salaryAllocations)
     }
 
     override fun onButtonOnClick() {
