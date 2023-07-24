@@ -3,11 +3,13 @@ package com.app.keuanganku.ui.main
 import android.os.Bundle
 import android.widget.Toast
 import com.app.keuanganku.data.entity.SalaryEntity
-import com.app.keuanganku.ui.common.dialog.CustomDialog
 import com.app.keuanganku.ui.common.BaseActivity
 import com.app.keuanganku.ui.common.ViewMvcFactory
 import com.app.keuanganku.ui.common.dialog.CustomDialogEvent
 import com.app.keuanganku.ui.common.dialog.DialogEventBus
+import com.app.keuanganku.ui.common.dialog.addsalary.DialogAddSalary
+import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocation
+import com.app.keuanganku.usecase.GetSalaryAllocationUseCase
 import com.app.keuanganku.usecase.GetSalaryUseCase
 import com.app.keuanganku.usecase.UpdateSalaryUseCase
 import kotlinx.coroutines.launch
@@ -22,6 +24,9 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
 
     @Inject
     lateinit var getSalaryUseCase: GetSalaryUseCase
+
+    @Inject
+    lateinit var getSalaryAllocationUseCase: GetSalaryAllocationUseCase
 
     @Inject
     lateinit var viewMvcFactory: ViewMvcFactory
@@ -57,35 +62,47 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
     private fun getSalaryFromUseCase() {
         coroutineScope.launch {
             salaryEntity = getSalaryUseCase.getSalary()
-            setSalary()
+            fetchSalary()
         }
     }
 
-    private fun setSalary() {
+    private fun fetchSalary() {
         viewMvc.setSalary(salaryEntity)
     }
 
     override fun inputSalary() {
-        val customDialog = CustomDialog("Input Salary", salaryEntity)
+        val dialogAddSalary = DialogAddSalary("Input Salary", salaryEntity)
 
-        customDialog.show(supportFragmentManager, "inputSalary")
+        dialogAddSalary.show(supportFragmentManager, "inputSalary")
     }
 
     override fun onSalaryAllocationClicked() {
-        Toast.makeText(this, "Salary Allocation Clicked", Toast.LENGTH_SHORT).show()
+        val dialogAddAllocation = DialogAddAllocation()
+
+        dialogAddAllocation.show(supportFragmentManager, "addAllocation")
     }
 
     override fun onDialogEvent(event: Any) {
         if (event is CustomDialogEvent) when (event.getClickedButton()) {
             CustomDialogEvent.Button.POSITIVE -> {
-                coroutineScope.launch {
-                    event.getSalaryEntity()?.let { updateSalaryUseCase.updateSalary(it) }
-                }
-
-                setSalary()
+                fetchSalary()
+                fetchSalaryAllocation()
             }
             CustomDialogEvent.Button.NEGATIVE -> {
                 Toast.makeText(this, "Negative button clicked", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun fetchSalaryAllocation() {
+        coroutineScope.launch {
+            if (getSalaryAllocationUseCase.getSalaryAllocation().isNotEmpty()) {
+                val salaryAllocation = getSalaryAllocationUseCase.getSalaryAllocation()[0]
+                Toast.makeText(
+                    this@MainActivity,
+                    "salary allocation ${salaryAllocation.title}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

@@ -1,24 +1,29 @@
-package com.app.keuanganku.ui.common.dialog
+package com.app.keuanganku.ui.common.dialog.addsalaryallocation
 
 import android.app.Dialog
 import android.os.Bundle
-import com.app.keuanganku.data.entity.SalaryEntity
+import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.ui.common.ViewMvcFactory
+import com.app.keuanganku.ui.common.dialog.CustomDialogEvent
+import com.app.keuanganku.ui.common.dialog.DialogEventBus
 import com.app.keuanganku.ui.common.dialog.basedialog.BaseCustomDialog
 import com.app.keuanganku.ui.common.dialog.basedialog.BaseCustomDialogViewMvc
+import com.app.keuanganku.usecase.InsertSalaryAllocationUseCase
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class CustomDialog(private val title: String, private val salaryEntity: SalaryEntity) :
-    BaseCustomDialog(),
-    BaseCustomDialogViewMvc.Listener {
+class DialogAddAllocation : BaseCustomDialog(), BaseCustomDialogViewMvc.Listener {
+
+    @Inject
+    lateinit var viewMvcFactory: ViewMvcFactory
 
     @Inject
     lateinit var dialogEventBus: DialogEventBus
 
     @Inject
-    lateinit var viewMvcFactory: ViewMvcFactory
+    lateinit var insertSalaryAllocationUseCase: InsertSalaryAllocationUseCase
 
-    private lateinit var viewMvc: CustomDialogAddSalaryViewMvc
+    lateinit var viewMvc: DialogAddAllocationViewMvc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injector.inject(this)
@@ -26,10 +31,8 @@ class CustomDialog(private val title: String, private val salaryEntity: SalaryEn
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        viewMvc = viewMvcFactory.getCustomDialogAddSalaryViewMvc(null)
-        viewMvc.setTitle(title)
-        viewMvc.setEditTextSalary(salaryEntity.salary.toString())
-        viewMvc.setSalaryEntity(salaryEntity)
+        viewMvc = viewMvcFactory.getDialogAddAllocation(null)
+        viewMvc.setTitle("Add Allocation")
 
         val dialog = Dialog(requireContext())
         dialog.setContentView(viewMvc.getRootView())
@@ -47,8 +50,11 @@ class CustomDialog(private val title: String, private val salaryEntity: SalaryEn
         viewMvc.unregisterListener(this)
     }
 
-    override fun onClickPositiveButton(salaryEntity: SalaryEntity) {
-        dialogEventBus.postEvent(CustomDialogEvent(CustomDialogEvent.Button.POSITIVE, salaryEntity))
+    override fun onClickPositiveButton(objects: Any) {
+        coroutineScope.launch {
+            insertSalaryAllocationUseCase.insertSalary(objects as SalaryAllocation)
+        }
+        dialogEventBus.postEvent(CustomDialogEvent(CustomDialogEvent.Button.POSITIVE))
         dismiss()
     }
 

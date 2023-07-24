@@ -1,4 +1,4 @@
-package com.app.keuanganku.ui.common.dialog
+package com.app.keuanganku.ui.common.dialog.addsalary
 
 import android.text.InputType
 import android.view.LayoutInflater
@@ -11,10 +11,10 @@ import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.ui.common.dialog.basedialog.BaseCustomDialogViewMvc
 import com.app.keuanganku.ui.common.viewmvc.BaseObservableViewMvc
 
-class CustomDialogAddSalaryViewViewMvcImpl(
+class DialogAddSalaryViewMvcImpl(
     layoutInflater: LayoutInflater,
     parent: ViewGroup?,
-) : BaseObservableViewMvc<BaseCustomDialogViewMvc.Listener>(), CustomDialogAddSalaryViewMvc {
+) : BaseObservableViewMvc<BaseCustomDialogViewMvc.Listener>(), DialogAddSalaryViewMvc {
 
     private var textViewTitle: TextView
     private var editTextInputSalary: EditText
