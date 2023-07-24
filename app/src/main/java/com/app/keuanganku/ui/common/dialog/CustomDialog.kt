@@ -1,31 +1,24 @@
-package com.app.keuanganku.ui
+package com.app.keuanganku.ui.common.dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import com.app.keuanganku.common.di.presentation.PresentationModule
 import com.app.keuanganku.data.entity.SalaryEntity
-import com.app.keuanganku.ui.common.BaseActivity
-import com.app.keuanganku.ui.common.dialog.CustomDialogEvent
-import com.app.keuanganku.ui.common.dialog.DialogEventBus
+import com.app.keuanganku.ui.common.ViewMvcFactory
+import com.app.keuanganku.ui.common.dialog.basedialog.BaseCustomDialog
+import com.app.keuanganku.ui.common.dialog.basedialog.BaseCustomDialogViewMvc
 import javax.inject.Inject
 
 class CustomDialog(private val title: String, private val salaryEntity: SalaryEntity) :
-    DialogFragment(),
-    CustomDialogViewMvcImpl.Listener {
-
-    private val presentationComponent by lazy {
-        (requireActivity() as BaseActivity).activityComponent.newPresentationComponent(
-            PresentationModule()
-        )
-    }
-
-    private val injector get() = presentationComponent
+    BaseCustomDialog(),
+    BaseCustomDialogViewMvc.Listener {
 
     @Inject
     lateinit var dialogEventBus: DialogEventBus
 
-    private lateinit var viewMvc: CustomDialogViewMvcImpl
+    @Inject
+    lateinit var viewMvcFactory: ViewMvcFactory
+
+    private lateinit var viewMvc: CustomDialogAddSalaryViewMvc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injector.inject(this)
@@ -33,14 +26,13 @@ class CustomDialog(private val title: String, private val salaryEntity: SalaryEn
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        viewMvc = CustomDialogViewMvcImpl(layoutInflater, null)
-
+        viewMvc = viewMvcFactory.getCustomDialogAddSalaryViewMvc(null)
         viewMvc.setTitle(title)
         viewMvc.setEditTextSalary(salaryEntity.salary.toString())
         viewMvc.setSalaryEntity(salaryEntity)
 
         val dialog = Dialog(requireContext())
-        dialog.setContentView(viewMvc.rootView)
+        dialog.setContentView(viewMvc.getRootView())
 
         return dialog
     }

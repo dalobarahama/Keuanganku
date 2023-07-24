@@ -1,6 +1,6 @@
 package com.app.keuanganku.common.di.presentation
 
-import com.app.keuanganku.ui.CustomDialog
+import com.app.keuanganku.ui.common.dialog.CustomDialog
 import com.app.keuanganku.ui.main.MainActivity
 import dagger.Subcomponent
 

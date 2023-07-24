@@ -3,7 +3,7 @@ package com.app.keuanganku.ui.main
 import android.os.Bundle
 import android.widget.Toast
 import com.app.keuanganku.data.entity.SalaryEntity
-import com.app.keuanganku.ui.CustomDialog
+import com.app.keuanganku.ui.common.dialog.CustomDialog
 import com.app.keuanganku.ui.common.BaseActivity
 import com.app.keuanganku.ui.common.ViewMvcFactory
 import com.app.keuanganku.ui.common.dialog.CustomDialogEvent
