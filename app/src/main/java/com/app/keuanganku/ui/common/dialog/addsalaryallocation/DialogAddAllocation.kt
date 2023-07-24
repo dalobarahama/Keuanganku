@@ -8,7 +8,7 @@ import com.app.keuanganku.ui.common.dialog.CustomDialogEvent
 import com.app.keuanganku.ui.common.dialog.DialogEventBus
 import com.app.keuanganku.ui.common.dialog.basedialog.BaseCustomDialog
 import com.app.keuanganku.ui.common.dialog.basedialog.BaseCustomDialogViewMvc
-import com.app.keuanganku.usecase.InsertSalaryAllocationUseCase
+import com.app.keuanganku.usecase.salaryallocation.InsertSalaryAllocationUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

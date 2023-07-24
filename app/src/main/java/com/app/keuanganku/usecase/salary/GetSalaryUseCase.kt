@@ -1,4 +1,4 @@
-package com.app.keuanganku.usecase
+package com.app.keuanganku.usecase.salary
 
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.data.room.KeuangankuDao

@@ -1,10 +1,10 @@
 package com.app.keuanganku.common.di.presentation
 
 import com.app.keuanganku.data.room.KeuangankuDao
-import com.app.keuanganku.usecase.GetSalaryAllocationUseCase
-import com.app.keuanganku.usecase.GetSalaryUseCase
-import com.app.keuanganku.usecase.InsertSalaryAllocationUseCase
-import com.app.keuanganku.usecase.UpdateSalaryUseCase
+import com.app.keuanganku.usecase.salaryallocation.GetSalaryAllocationUseCase
+import com.app.keuanganku.usecase.salary.GetSalaryUseCase
+import com.app.keuanganku.usecase.salaryallocation.InsertSalaryAllocationUseCase
+import com.app.keuanganku.usecase.salary.UpdateSalaryUseCase
 import dagger.Module
 import dagger.Provides
 

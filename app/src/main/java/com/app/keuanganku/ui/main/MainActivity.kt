@@ -9,9 +9,9 @@ import com.app.keuanganku.ui.common.dialog.CustomDialogEvent
 import com.app.keuanganku.ui.common.dialog.DialogEventBus
 import com.app.keuanganku.ui.common.dialog.addsalary.DialogAddSalary
 import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocation
-import com.app.keuanganku.usecase.GetSalaryAllocationUseCase
-import com.app.keuanganku.usecase.GetSalaryUseCase
-import com.app.keuanganku.usecase.UpdateSalaryUseCase
+import com.app.keuanganku.usecase.salaryallocation.GetSalaryAllocationUseCase
+import com.app.keuanganku.usecase.salary.GetSalaryUseCase
+import com.app.keuanganku.usecase.salary.UpdateSalaryUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
