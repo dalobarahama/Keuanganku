@@ -70,13 +70,11 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
 
     override fun inputSalary() {
         val dialogAddSalary = DialogAddSalary("Input Salary", salaryEntity)
-
         dialogAddSalary.show(supportFragmentManager, "inputSalary")
     }
 
     override fun addSalaryAllocation() {
         val dialogAddAllocation = DialogAddAllocation()
-
         dialogAddAllocation.show(supportFragmentManager, "addAllocation")
     }
 

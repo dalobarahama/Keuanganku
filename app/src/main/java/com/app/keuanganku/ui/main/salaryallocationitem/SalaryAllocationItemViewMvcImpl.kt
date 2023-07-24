@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.app.keuanganku.R
 import com.app.keuanganku.data.entity.SalaryAllocation
+import com.app.keuanganku.data.helper.CurrencyFormatterIDR
 import com.app.keuanganku.ui.common.viewmvc.BaseObservableViewMvc
 
 class SalaryAllocationItemViewMvcImpl(
@@ -19,6 +20,7 @@ class SalaryAllocationItemViewMvcImpl(
     private val buttonAddAllocationItem: Button
 
     private lateinit var salaryAllocation: SalaryAllocation
+    private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
 
     init {
         setRootView(layoutInflater.inflate(R.layout.item_salary_allocation, parent, false))
@@ -45,7 +47,11 @@ class SalaryAllocationItemViewMvcImpl(
         this.salaryAllocation = salaryAllocation
 
         salaryAllocationTitleTextView.text = salaryAllocation.title
-        salaryAllocationAmount.text = salaryAllocation.amount.toString()
+        salaryAllocationAmount.text = salaryAllocation.amount?.let {
+            currencyFormatterIDR.getCurrency(
+                it
+            )
+        }
     }
 
 }
