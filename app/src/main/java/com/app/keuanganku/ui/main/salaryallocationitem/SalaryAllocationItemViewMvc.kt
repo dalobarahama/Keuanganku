@@ -7,6 +7,7 @@ interface SalaryAllocationItemViewMvc : ObservableViewMvc<SalaryAllocationItemVi
 
     interface Listener {
         fun onItemClicked(salaryAllocation: SalaryAllocation)
+        fun onItemLongClick(salaryAllocation: SalaryAllocation)
     }
 
     fun bindSalaryAllocation(salaryAllocation: SalaryAllocation)

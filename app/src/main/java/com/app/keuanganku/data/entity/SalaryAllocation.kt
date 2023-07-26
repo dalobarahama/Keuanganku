@@ -11,12 +11,12 @@ import kotlinx.parcelize.Parcelize
 data class SalaryAllocation(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = 0,
+    val id: Int? = null,
 
     @ColumnInfo(name = "allocation_title")
-    val title: String? = null,
+    var title: String? = null,
 
     @ColumnInfo(name = "allocation_amount")
-    val amount: Int? = null
+    var amount: Int? = null
 
 ) : Parcelable

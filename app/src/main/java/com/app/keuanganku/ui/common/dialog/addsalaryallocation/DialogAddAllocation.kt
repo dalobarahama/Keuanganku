@@ -9,10 +9,12 @@ import com.app.keuanganku.ui.common.dialog.DialogEventBus
 import com.app.keuanganku.ui.common.dialog.basedialog.BaseCustomDialog
 import com.app.keuanganku.ui.common.dialog.basedialog.BaseCustomDialogViewMvc
 import com.app.keuanganku.usecase.salaryallocation.InsertSalaryAllocationUseCase
+import com.app.keuanganku.usecase.salaryallocation.UpdateSalaryAllocationUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DialogAddAllocation : BaseCustomDialog(), BaseCustomDialogViewMvc.Listener {
+class DialogAddAllocation(val salaryAllocation: SalaryAllocation? = null) : BaseCustomDialog(),
+    BaseCustomDialogViewMvc.Listener {
 
     @Inject
     lateinit var viewMvcFactory: ViewMvcFactory
@@ -22,6 +24,9 @@ class DialogAddAllocation : BaseCustomDialog(), BaseCustomDialogViewMvc.Listener
 
     @Inject
     lateinit var insertSalaryAllocationUseCase: InsertSalaryAllocationUseCase
+
+    @Inject
+    lateinit var updateSalaryAllocationUseCase: UpdateSalaryAllocationUseCase
 
     lateinit var viewMvc: DialogAddAllocationViewMvc
 
@@ -33,6 +38,7 @@ class DialogAddAllocation : BaseCustomDialog(), BaseCustomDialogViewMvc.Listener
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         viewMvc = viewMvcFactory.getDialogAddAllocationViewMvc(null)
         viewMvc.setTitle("Add Allocation")
+        viewMvc.setSalaryAllocation(salaryAllocation)
 
         val dialog = Dialog(requireContext())
         dialog.setContentView(viewMvc.getRootView())
@@ -52,7 +58,13 @@ class DialogAddAllocation : BaseCustomDialog(), BaseCustomDialogViewMvc.Listener
 
     override fun onClickPositiveButton(objects: Any) {
         coroutineScope.launch {
-            insertSalaryAllocationUseCase.insertSalary(objects as SalaryAllocation)
+            val item = objects as SalaryAllocation
+
+            if (salaryAllocation?.id != null && salaryAllocation.id == item.id) {
+                updateSalaryAllocationUseCase.updateSalaryAllocation(item)
+            } else {
+                insertSalaryAllocationUseCase.insertSalary(item)
+            }
         }
         dialogEventBus.postEvent(CustomDialogEvent(CustomDialogEvent.Button.POSITIVE))
         dismiss()

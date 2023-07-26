@@ -9,7 +9,8 @@ interface MainActivityViewMvc : ObservableViewMvc<MainActivityViewMvc.Listener> 
     interface Listener {
         fun inputSalary()
         fun addSalaryAllocation()
-        fun onSalaryAllocationItemClicked(salaryAllocation: SalaryAllocation)
+        fun addSalaryAllocationItem(salaryAllocation: SalaryAllocation)
+        fun onSalaryAllocationLongClicked(salaryAllocation: SalaryAllocation)
     }
 
     fun setSalary(salaryEntity: SalaryEntity)

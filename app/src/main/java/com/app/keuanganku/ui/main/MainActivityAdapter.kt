@@ -17,6 +17,7 @@ class MainActivityAdapter(
 
     interface Listener {
         fun onItemClicked(salaryAllocation: SalaryAllocation)
+        fun onItemLongClick(salaryAllocation: SalaryAllocation)
     }
 
     private val listSalaryAllocations = ArrayList<SalaryAllocation>()
@@ -24,12 +25,10 @@ class MainActivityAdapter(
     private var totalAllocationAmount = 0
 
     fun setListSalaryAllocations(listAllocation: List<SalaryAllocation>) {
-        val diffCallback = AllocationDiffCallback(this.listSalaryAllocations, listAllocation)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-
         this.listSalaryAllocations.clear()
         this.listSalaryAllocations.addAll(listAllocation)
-        diffResult.dispatchUpdatesTo(this)
+
+        notifyDataSetChanged()
     }
 
     fun setAllocationTotalAmount(amount: Int) {
@@ -55,5 +54,9 @@ class MainActivityAdapter(
 
     override fun onItemClicked(salaryAllocation: SalaryAllocation) {
         listener.onItemClicked(salaryAllocation)
+    }
+
+    override fun onItemLongClick(salaryAllocation: SalaryAllocation) {
+        listener.onItemLongClick(salaryAllocation)
     }
 }

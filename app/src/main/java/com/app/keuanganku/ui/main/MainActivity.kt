@@ -1,6 +1,7 @@
 package com.app.keuanganku.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
@@ -78,8 +79,13 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
         dialogAddAllocation.show(supportFragmentManager, "addAllocation")
     }
 
-    override fun onSalaryAllocationItemClicked(salaryAllocation: SalaryAllocation) {
+    override fun addSalaryAllocationItem(salaryAllocation: SalaryAllocation) {
         Toast.makeText(this, "${salaryAllocation.title} clicked", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSalaryAllocationLongClicked(salaryAllocation: SalaryAllocation) {
+        val dialogAddAllocation = DialogAddAllocation(salaryAllocation)
+        dialogAddAllocation.show(supportFragmentManager, "editAllocation")
     }
 
     override fun onDialogEvent(event: Any) {

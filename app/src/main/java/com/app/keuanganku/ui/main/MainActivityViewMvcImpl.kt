@@ -69,7 +69,13 @@ class MainActivityViewMvcImpl(
 
     override fun onItemClicked(salaryAllocation: SalaryAllocation) {
         for (listener in getListeners()) {
-            listener.onSalaryAllocationItemClicked(salaryAllocation)
+            listener.addSalaryAllocationItem(salaryAllocation)
+        }
+    }
+
+    override fun onItemLongClick(salaryAllocation: SalaryAllocation) {
+        for (listener in getListeners()){
+            listener.onSalaryAllocationLongClicked(salaryAllocation)
         }
     }
 }

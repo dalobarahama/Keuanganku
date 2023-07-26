@@ -1,10 +1,11 @@
 package com.app.keuanganku.common.di.presentation
 
 import com.app.keuanganku.data.room.KeuangankuDao
-import com.app.keuanganku.usecase.salaryallocation.GetSalaryAllocationUseCase
 import com.app.keuanganku.usecase.salary.GetSalaryUseCase
-import com.app.keuanganku.usecase.salaryallocation.InsertSalaryAllocationUseCase
 import com.app.keuanganku.usecase.salary.UpdateSalaryUseCase
+import com.app.keuanganku.usecase.salaryallocation.GetSalaryAllocationUseCase
+import com.app.keuanganku.usecase.salaryallocation.InsertSalaryAllocationUseCase
+import com.app.keuanganku.usecase.salaryallocation.UpdateSalaryAllocationUseCase
 import dagger.Module
 import dagger.Provides
 
@@ -24,4 +25,9 @@ class PresentationModule {
     @Provides
     fun getSalaryAllocationUseCase(keuangankuDao: KeuangankuDao) =
         GetSalaryAllocationUseCase(keuangankuDao)
+
+    @Provides
+    fun updateSalaryAllocationUseCase(keuangankuDao: KeuangankuDao) =
+        UpdateSalaryAllocationUseCase(keuangankuDao)
+
 }

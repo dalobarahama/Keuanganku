@@ -1,6 +1,8 @@
 package com.app.keuanganku.ui.main.salaryallocationitem
 
 import android.view.LayoutInflater
+import android.view.View
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
@@ -30,10 +32,11 @@ class SalaryAllocationItemViewMvcImpl(
         salaryAllocationTotalAmount = findViewById(R.id.tv_allocation_total_spend)
         buttonAddAllocationItem = findViewById(R.id.btn_add_allocation_item)
 
-        getRootView().setOnClickListener {
+        getRootView().setOnLongClickListener {
             for (listener in getListeners()) {
-                listener.onItemClicked(salaryAllocation)
+                listener.onItemLongClick(salaryAllocation)
             }
+            true
         }
 
         buttonAddAllocationItem.setOnClickListener {

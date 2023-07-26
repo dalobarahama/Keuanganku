@@ -19,6 +19,8 @@ class DialogAddAllocationViewMvcImpl(layoutInflater: LayoutInflater, parent: Vie
     private val editTextAllocationAmount: EditText
     private val editTextAllocationTitle: EditText
 
+    private var salaryAllocation: SalaryAllocation = SalaryAllocation()
+
     init {
         setRootView(layoutInflater.inflate(R.layout.dialog_layout, parent))
 
@@ -31,11 +33,8 @@ class DialogAddAllocationViewMvcImpl(layoutInflater: LayoutInflater, parent: Vie
         val buttonSave = findViewById<Button>(R.id.btn_dialog_positive)
 
         buttonSave.setOnClickListener {
-            val salaryAllocation = SalaryAllocation(
-                null,
-                editTextAllocationTitle.text.toString(),
-                editTextAllocationAmount.text.toString().toInt()
-            )
+            salaryAllocation.title = editTextAllocationTitle.text.toString()
+            salaryAllocation.amount = editTextAllocationAmount.text.toString().toInt()
 
             for (listener in getListeners()) {
                 listener.onClickPositiveButton(salaryAllocation)
@@ -50,12 +49,20 @@ class DialogAddAllocationViewMvcImpl(layoutInflater: LayoutInflater, parent: Vie
 
     }
 
-    override fun setAllocationTitle(title: String) {
+    private fun setAllocationTitle(title: String) {
         editTextAllocationTitle.setText(title)
     }
 
-    override fun setAllocationAmount(amount: Int) {
+    private fun setAllocationAmount(amount: Int) {
         editTextAllocationAmount.setText(amount.toString())
+    }
+
+    override fun setSalaryAllocation(salaryAllocation: SalaryAllocation?) {
+        if (salaryAllocation != null) {
+            this.salaryAllocation = salaryAllocation
+            setAllocationTitle(salaryAllocation.title.toString())
+            salaryAllocation.amount?.let { setAllocationAmount(it) }
+        }
     }
 
     override fun setTitle(title: String) {
