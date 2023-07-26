@@ -8,6 +8,8 @@ import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocati
 import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocationViewMvcImpl
 import com.app.keuanganku.ui.main.MainActivityViewMvc
 import com.app.keuanganku.ui.main.MainActivityViewMvcImpl
+import com.app.keuanganku.ui.main.allocationitem.AllocationItemViewMvc
+import com.app.keuanganku.ui.main.allocationitem.AllocationItemViewMvcImpl
 import com.app.keuanganku.ui.main.salaryallocationitem.SalaryAllocationItemViewMvc
 import com.app.keuanganku.ui.main.salaryallocationitem.SalaryAllocationItemViewMvcImpl
 
@@ -27,6 +29,10 @@ class ViewMvcFactory(private val layoutInflater: LayoutInflater) {
 
     fun getSalaryAllocationItemViewMvc(parent: ViewGroup?): SalaryAllocationItemViewMvc {
         return SalaryAllocationItemViewMvcImpl(layoutInflater, parent)
+    }
+
+    fun getAllocationItemViewMvc(parent: ViewGroup?): AllocationItemViewMvc {
+        return AllocationItemViewMvcImpl(layoutInflater, parent)
     }
 
 }
