@@ -1,5 +1,6 @@
 package com.app.keuanganku.ui.main.salaryallocationitem
 
+import com.app.keuanganku.data.entity.AllocationItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.ui.common.viewmvc.ObservableViewMvc
 
@@ -11,5 +12,6 @@ interface SalaryAllocationItemViewMvc : ObservableViewMvc<SalaryAllocationItemVi
     }
 
     fun bindSalaryAllocation(salaryAllocation: SalaryAllocation)
+    fun bindAllocationItem(allocationItems: List<AllocationItem>)
 
 }

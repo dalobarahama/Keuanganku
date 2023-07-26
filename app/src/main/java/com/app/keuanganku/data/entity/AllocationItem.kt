@@ -14,9 +14,9 @@ data class AllocationItem(
     val id: Int? = 0,
 
     @ColumnInfo(name = "allocation_item_title")
-    val title: String? = null,
+    var title: String? = null,
 
     @ColumnInfo(name = "allocation_item_amount")
-    val amount: Int? = null
+    var amount: Int? = null
 
 ) : Parcelable

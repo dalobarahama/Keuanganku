@@ -2,6 +2,8 @@ package com.app.keuanganku.ui.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.app.keuanganku.ui.common.dialog.addallocationitem.DialogAddAllocationItemViewMvc
+import com.app.keuanganku.ui.common.dialog.addallocationitem.DialogAddAllocationItemViewMvcImpl
 import com.app.keuanganku.ui.common.dialog.addsalary.DialogAddSalaryViewMvc
 import com.app.keuanganku.ui.common.dialog.addsalary.DialogAddSalaryViewMvcImpl
 import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocationViewMvc
@@ -28,11 +30,15 @@ class ViewMvcFactory(private val layoutInflater: LayoutInflater) {
     }
 
     fun getSalaryAllocationItemViewMvc(parent: ViewGroup?): SalaryAllocationItemViewMvc {
-        return SalaryAllocationItemViewMvcImpl(layoutInflater, parent)
+        return SalaryAllocationItemViewMvcImpl(layoutInflater, parent, this)
     }
 
     fun getAllocationItemViewMvc(parent: ViewGroup?): AllocationItemViewMvc {
         return AllocationItemViewMvcImpl(layoutInflater, parent)
+    }
+
+    fun getDialogAddAllocationItemViewMvc(parent: ViewGroup?): DialogAddAllocationItemViewMvc {
+        return DialogAddAllocationItemViewMvcImpl(layoutInflater, parent)
     }
 
 }

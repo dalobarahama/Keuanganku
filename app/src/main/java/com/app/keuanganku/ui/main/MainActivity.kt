@@ -11,6 +11,7 @@ import com.app.keuanganku.ui.common.dialog.CustomDialogEvent
 import com.app.keuanganku.ui.common.dialog.DialogEventBus
 import com.app.keuanganku.ui.common.dialog.addsalary.DialogAddSalary
 import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocation
+import com.app.keuanganku.usecase.allocationitem.GetAllocationItemUseCase
 import com.app.keuanganku.usecase.salary.GetSalaryUseCase
 import com.app.keuanganku.usecase.salary.UpdateSalaryUseCase
 import com.app.keuanganku.usecase.salaryallocation.GetSalaryAllocationUseCase
@@ -29,6 +30,9 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
 
     @Inject
     lateinit var getSalaryAllocationUseCase: GetSalaryAllocationUseCase
+
+    @Inject
+    lateinit var getAllocationItemUseCase: GetAllocationItemUseCase
 
     @Inject
     lateinit var viewMvcFactory: ViewMvcFactory
@@ -104,6 +108,10 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
         coroutineScope.launch {
             if (getSalaryAllocationUseCase.getSalaryAllocation().isNotEmpty()) {
                 viewMvc.bindSalaryAllocation(getSalaryAllocationUseCase.getSalaryAllocation())
+
+                for(salaryAllocation in getSalaryAllocationUseCase.getSalaryAllocation()){
+
+                }
             }
         }
     }
