@@ -11,7 +11,7 @@ import kotlinx.parcelize.Parcelize
 data class AllocationItem(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = 0,
+    val allocationItemId: Int? = null,
 
     @ColumnInfo(name = "allocation_item_title")
     var title: String? = null,

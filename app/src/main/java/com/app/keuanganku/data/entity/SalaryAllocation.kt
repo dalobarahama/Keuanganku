@@ -11,7 +11,7 @@ import kotlinx.parcelize.Parcelize
 data class SalaryAllocation(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
+    val salaryAllocationId: Int? = null,
 
     @ColumnInfo(name = "allocation_title")
     var title: String? = null,

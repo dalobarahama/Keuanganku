@@ -60,7 +60,7 @@ class DialogAddAllocation(val salaryAllocation: SalaryAllocation? = null) : Base
         coroutineScope.launch {
             val item = objects as SalaryAllocation
 
-            if (salaryAllocation?.id != null && salaryAllocation.id == item.id) {
+            if (salaryAllocation?.salaryAllocationId != null && salaryAllocation.salaryAllocationId == item.salaryAllocationId) {
                 updateSalaryAllocationUseCase.updateSalaryAllocation(item)
             } else {
                 insertSalaryAllocationUseCase.insertSalary(item)
