@@ -25,6 +25,7 @@ class MainActivityViewMvcImpl(
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
 
     private val tvSalary: TextView
+    private val btnAddSalary: Button
 
     init {
         setRootView(layoutInflater.inflate(R.layout.activity_main, parent, false))
@@ -32,7 +33,7 @@ class MainActivityViewMvcImpl(
         mainActivityAdapter = MainActivityAdapter(this, viewMvcFactory)
 
         tvSalary = findViewById(R.id.tv_salary)
-        val btnAddSalary = findViewById<Button>(R.id.btn_add_salary)
+        btnAddSalary = findViewById(R.id.btn_add_salary)
         val btnAddSalaryAllocation = findViewById<Button>(R.id.btn_add_salary_allocation)
         val rvAllocation = findViewById<RecyclerView>(R.id.rv_allocation)
 
@@ -54,13 +55,19 @@ class MainActivityViewMvcImpl(
     }
 
     override fun setSalary(salaryEntity: SalaryEntity) {
-        tvSalary.text = "Salary ${
+        if (salaryEntity.salary == null || salaryEntity.salary == 0){
+            btnAddSalary.text = "Add"
+        } else {
+            btnAddSalary.text = "Update"
+        }
+
+        "Salary ${
             salaryEntity.salary?.let {
                 currencyFormatterIDR.getCurrency(
                     it
                 )
             }
-        }"
+        }".also { tvSalary.text = it }
     }
 
     override fun bindSalaryAllocation(salaryAllocations: List<SalaryAllocation>) {

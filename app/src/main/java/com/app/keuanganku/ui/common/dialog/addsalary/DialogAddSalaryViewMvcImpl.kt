@@ -32,7 +32,11 @@ class DialogAddSalaryViewMvcImpl(
         editTextInputSalary.inputType = InputType.TYPE_CLASS_NUMBER
 
         buttonSave.setOnClickListener {
-            salaryEntity.salary = editTextInputSalary.text.toString().toInt()
+            if (editTextInputSalary.text.toString().isEmpty()){
+                salaryEntity.salary = 0
+            } else {
+                salaryEntity.salary = editTextInputSalary.text.toString().toInt()
+            }
 
             for (listener in getListeners()) {
                 listener.onClickPositiveButton(salaryEntity)
