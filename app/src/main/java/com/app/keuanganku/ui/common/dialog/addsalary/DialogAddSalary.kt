@@ -2,6 +2,7 @@ package com.app.keuanganku.ui.common.dialog.addsalary
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import com.app.keuanganku.data.entity.SalaryEntity
 import com.app.keuanganku.ui.common.ViewMvcFactory
 import com.app.keuanganku.ui.common.dialog.CustomDialogEvent
@@ -57,14 +58,14 @@ class DialogAddSalary(private val title: String, private val salaryEntity: Salar
     override fun onClickPositiveButton(objects: Any) {
         coroutineScope.launch {
             updateSalaryUseCase.updateSalary(objects as SalaryEntity)
-        }
 
-        dialogEventBus.postEvent(
-            CustomDialogEvent(
-                CustomDialogEvent.Button.POSITIVE
+            dialogEventBus.postEvent(
+                CustomDialogEvent(
+                    CustomDialogEvent.Button.POSITIVE
+                )
             )
-        )
-        dismiss()
+            dismiss()
+        }
     }
 
     override fun onClickNegativeButton() {

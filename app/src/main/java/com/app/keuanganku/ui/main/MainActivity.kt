@@ -46,8 +46,6 @@ class MainActivity : BaseActivity(), MainActivityViewMvc.Listener, DialogEventBu
         injector.inject(this)
         super.onCreate(savedInstanceState)
 
-        fetchSalary()
-
         viewMvc = viewMvcFactory.getMainActivityViewMvc(null)
         setContentView(viewMvc.getRootView())
     }
