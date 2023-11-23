@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import com.app.keuanganku.R
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.ui.common.dialog.basedialog.BaseCustomDialogViewMvc
@@ -33,11 +34,15 @@ class DialogAddAllocationViewMvcImpl(layoutInflater: LayoutInflater, parent: Vie
         val buttonSave = findViewById<Button>(R.id.btn_dialog_positive)
 
         buttonSave.setOnClickListener {
-            salaryAllocation.title = editTextAllocationTitle.text.toString()
-            salaryAllocation.amount = editTextAllocationAmount.text.toString().toInt()
+            if (editTextAllocationTitle.text.isEmpty() || editTextAllocationAmount.text.isEmpty()) {
+                Toast.makeText(getContext(), "Field cannot be empty", Toast.LENGTH_SHORT).show()
+            } else {
+                salaryAllocation.title = editTextAllocationTitle.text.toString()
+                salaryAllocation.amount = editTextAllocationAmount.text.toString().toInt()
 
-            for (listener in getListeners()) {
-                listener.onClickPositiveButton(salaryAllocation)
+                for (listener in getListeners()) {
+                    listener.onClickPositiveButton(salaryAllocation)
+                }
             }
         }
 
