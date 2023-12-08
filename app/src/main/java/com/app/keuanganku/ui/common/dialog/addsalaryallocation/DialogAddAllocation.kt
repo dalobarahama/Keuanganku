@@ -65,9 +65,10 @@ class DialogAddAllocation(val salaryAllocation: SalaryAllocation? = null) : Base
             } else {
                 insertSalaryAllocationUseCase.insertSalary(item)
             }
+
+            dialogEventBus.postEvent(CustomDialogEvent(CustomDialogEvent.Button.POSITIVE))
+            dismiss()
         }
-        dialogEventBus.postEvent(CustomDialogEvent(CustomDialogEvent.Button.POSITIVE))
-        dismiss()
     }
 
     override fun onClickNegativeButton() {
