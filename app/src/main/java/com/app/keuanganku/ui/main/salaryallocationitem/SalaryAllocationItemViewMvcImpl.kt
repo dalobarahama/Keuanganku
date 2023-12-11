@@ -7,10 +7,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.keuanganku.R
-import com.app.keuanganku.data.entity.AllocationItem
+import com.app.keuanganku.data.entity.DeductionItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.helper.CurrencyFormatterIDR
-import com.app.keuanganku.ui.AllocationItemAdapter
+import com.app.keuanganku.ui.DeductionItemAdapter
 import com.app.keuanganku.ui.common.ViewMvcFactory
 import com.app.keuanganku.ui.common.viewmvc.BaseObservableViewMvc
 
@@ -28,12 +28,12 @@ class SalaryAllocationItemViewMvcImpl(
     private lateinit var salaryAllocation: SalaryAllocation
     private val currencyFormatterIDR: CurrencyFormatterIDR = CurrencyFormatterIDR()
 
-    private val allocationItemAdapter: AllocationItemAdapter
+    private val deductionItemAdapter: DeductionItemAdapter
 
     init {
         setRootView(layoutInflater.inflate(R.layout.item_salary_allocation, parent, false))
 
-        allocationItemAdapter = AllocationItemAdapter(viewMvcFactory)
+        deductionItemAdapter = DeductionItemAdapter(viewMvcFactory)
 
         salaryAllocationTitleTextView = findViewById(R.id.tv_item_allocation_name)
         salaryAllocationAmount = findViewById(R.id.tv_item_allocation_amount)
@@ -56,11 +56,11 @@ class SalaryAllocationItemViewMvcImpl(
 
         recyclerViewAllocationItem.layoutManager = LinearLayoutManager(getContext())
         recyclerViewAllocationItem.setHasFixedSize(true)
-        recyclerViewAllocationItem.adapter = allocationItemAdapter
+        recyclerViewAllocationItem.adapter = deductionItemAdapter
     }
 
-    override fun bindAllocationItem(allocationItems: List<AllocationItem>) {
-        allocationItemAdapter.setListAllocationItem(allocationItems)
+    override fun bindDeductionItem(deductionItems: List<DeductionItem>) {
+        deductionItemAdapter.setListAllocationItem(deductionItems)
     }
 
     override fun bindSalaryAllocation(salaryAllocation: SalaryAllocation) {

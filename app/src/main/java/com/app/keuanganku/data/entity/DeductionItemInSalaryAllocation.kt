@@ -4,13 +4,13 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 
-data class AllocationItemsInSalaryAllocation(
+data class DeductionItemInSalaryAllocation(
     @Embedded
     val salaryAllocation: SalaryAllocation,
     @Relation(
         parentColumn = "salaryAllocationId",
         entityColumn = "allocationItemId",
-        associateBy = Junction(SalaryAllocationWithAllocationItem::class)
+        associateBy = Junction(SalaryAllocationWithDeductionItem::class)
     )
-    val allocationItems: List<AllocationItem>,
+    val deductionItems: List<DeductionItem>,
 )

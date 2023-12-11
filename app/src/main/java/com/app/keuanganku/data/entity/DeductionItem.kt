@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "allocation_item")
 @Parcelize
-data class AllocationItem(
+data class DeductionItem(
 
     @PrimaryKey(autoGenerate = true)
     val allocationItemId: Int? = null,

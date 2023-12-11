@@ -2,16 +2,16 @@ package com.app.keuanganku.ui.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.app.keuanganku.ui.common.dialog.addallocationitem.DialogAddAllocationItemViewMvc
-import com.app.keuanganku.ui.common.dialog.addallocationitem.DialogAddAllocationItemViewMvcImpl
+import com.app.keuanganku.ui.common.dialog.addallocationitem.DialogAddDeductionItemViewMvc
+import com.app.keuanganku.ui.common.dialog.addallocationitem.DialogAddDeductionItemViewMvcImpl
 import com.app.keuanganku.ui.common.dialog.addsalary.DialogAddSalaryViewMvc
 import com.app.keuanganku.ui.common.dialog.addsalary.DialogAddSalaryViewMvcImpl
 import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocationViewMvc
 import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocationViewMvcImpl
 import com.app.keuanganku.ui.main.MainActivityViewMvc
 import com.app.keuanganku.ui.main.MainActivityViewMvcImpl
-import com.app.keuanganku.ui.main.allocationitem.AllocationItemViewMvc
-import com.app.keuanganku.ui.main.allocationitem.AllocationItemViewMvcImpl
+import com.app.keuanganku.ui.main.deductionitem.DeductionItemViewMvc
+import com.app.keuanganku.ui.main.deductionitem.DeductionItemViewMvcImpl
 import com.app.keuanganku.ui.main.salaryallocationitem.SalaryAllocationItemViewMvc
 import com.app.keuanganku.ui.main.salaryallocationitem.SalaryAllocationItemViewMvcImpl
 
@@ -33,12 +33,12 @@ class ViewMvcFactory(private val layoutInflater: LayoutInflater) {
         return SalaryAllocationItemViewMvcImpl(layoutInflater, parent, this)
     }
 
-    fun getAllocationItemViewMvc(parent: ViewGroup?): AllocationItemViewMvc {
-        return AllocationItemViewMvcImpl(layoutInflater, parent)
+    fun getAllocationItemViewMvc(parent: ViewGroup?): DeductionItemViewMvc {
+        return DeductionItemViewMvcImpl(layoutInflater, parent)
     }
 
-    fun getDialogAddAllocationItemViewMvc(parent: ViewGroup?): DialogAddAllocationItemViewMvc {
-        return DialogAddAllocationItemViewMvcImpl(layoutInflater, parent)
+    fun getDialogAddAllocationItemViewMvc(parent: ViewGroup?): DialogAddDeductionItemViewMvc {
+        return DialogAddDeductionItemViewMvcImpl(layoutInflater, parent)
     }
 
 }

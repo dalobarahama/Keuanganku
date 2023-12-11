@@ -1,11 +1,11 @@
 package com.app.keuanganku.data.helper
 
 import androidx.recyclerview.widget.DiffUtil
-import com.app.keuanganku.data.entity.AllocationItem
+import com.app.keuanganku.data.entity.DeductionItem
 
 class AllocationItemDiffCallback(
-    private val oldList: List<AllocationItem>,
-    private val newList: List<AllocationItem>
+    private val oldList: List<DeductionItem>,
+    private val newList: List<DeductionItem>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int {
         return oldList.size

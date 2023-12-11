@@ -7,19 +7,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.app.keuanganku.R
-import com.app.keuanganku.data.entity.AllocationItem
+import com.app.keuanganku.data.entity.DeductionItem
 import com.app.keuanganku.ui.common.dialog.basedialog.BaseCustomDialogViewMvc
 import com.app.keuanganku.ui.common.viewmvc.BaseObservableViewMvc
 
-class DialogAddAllocationItemViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?) :
+class DialogAddDeductionItemViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?) :
     BaseObservableViewMvc<BaseCustomDialogViewMvc.Listener>(),
-    DialogAddAllocationItemViewMvc {
+    DialogAddDeductionItemViewMvc {
 
     private val title: TextView
     private val editTextAllocationItemAmount: EditText
     private val editTextAllocationItemTitle: EditText
 
-    private var allocationItem: AllocationItem = AllocationItem()
+    private var deductionItem: DeductionItem = DeductionItem()
 
     init {
         setRootView(layoutInflater.inflate(R.layout.dialog_layout, parent))
@@ -33,11 +33,11 @@ class DialogAddAllocationItemViewMvcImpl(layoutInflater: LayoutInflater, parent:
         val buttonSave = findViewById<Button>(R.id.btn_dialog_positive)
 
         buttonSave.setOnClickListener {
-            allocationItem.title = editTextAllocationItemTitle.text.toString()
-            allocationItem.amount = editTextAllocationItemAmount.text.toString().toInt()
+            deductionItem.title = editTextAllocationItemTitle.text.toString()
+            deductionItem.amount = editTextAllocationItemAmount.text.toString().toInt()
 
             for (listener in getListeners()) {
-                listener.onClickPositiveButton(allocationItem)
+                listener.onClickPositiveButton(deductionItem)
             }
         }
 
@@ -57,11 +57,11 @@ class DialogAddAllocationItemViewMvcImpl(layoutInflater: LayoutInflater, parent:
         editTextAllocationItemAmount.setText(amount.toString())
     }
 
-    override fun setSalaryAllocationItem(allocationItem: AllocationItem?) {
-        if (allocationItem != null) {
-            this.allocationItem = allocationItem
-            setAllocationTitle(allocationItem.title.toString())
-            allocationItem.amount?.let { setAllocationAmount(it) }
+    override fun setSalaryAllocationItem(deductionItem: DeductionItem?) {
+        if (deductionItem != null) {
+            this.deductionItem = deductionItem
+            setAllocationTitle(deductionItem.title.toString())
+            deductionItem.amount?.let { setAllocationAmount(it) }
         }
     }
 

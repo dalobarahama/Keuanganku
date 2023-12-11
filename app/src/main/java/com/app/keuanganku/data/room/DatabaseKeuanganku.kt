@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.app.keuanganku.data.entity.AllocationItem
+import com.app.keuanganku.data.entity.DeductionItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
 import kotlinx.coroutines.CoroutineScope
@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Database(
-    entities = [SalaryEntity::class, SalaryAllocation::class, AllocationItem::class],
+    entities = [SalaryEntity::class, SalaryAllocation::class, DeductionItem::class],
     version = 1,
     exportSchema = false
 )

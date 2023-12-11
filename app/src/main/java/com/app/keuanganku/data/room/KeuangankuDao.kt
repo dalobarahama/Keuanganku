@@ -1,11 +1,10 @@
 package com.app.keuanganku.data.room
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.app.keuanganku.data.entity.AllocationItem
+import com.app.keuanganku.data.entity.DeductionItem
 import com.app.keuanganku.data.entity.SalaryAllocation
 import com.app.keuanganku.data.entity.SalaryEntity
 
@@ -31,11 +30,11 @@ interface KeuangankuDao {
     fun getAllSalaryAllocation(): List<SalaryAllocation>
 
     @Insert
-    fun insertAllocationItem(allocationItem: AllocationItem)
+    fun insertAllocationItem(deductionItem: DeductionItem)
 
     @Update
-    fun updateAllocationItem(allocationItem: AllocationItem)
+    fun updateAllocationItem(deductionItem: DeductionItem)
 
     @Query("SELECT * FROM allocation_item")
-    fun getAllSAllocationItem(): List<AllocationItem>
+    fun getAllSAllocationItem(): List<DeductionItem>
 }

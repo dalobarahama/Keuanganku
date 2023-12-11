@@ -2,7 +2,7 @@ package com.app.keuanganku.ui.common.dialog.addallocationitem
 
 import android.app.Dialog
 import android.os.Bundle
-import com.app.keuanganku.data.entity.AllocationItem
+import com.app.keuanganku.data.entity.DeductionItem
 import com.app.keuanganku.ui.common.ViewMvcFactory
 import com.app.keuanganku.ui.common.dialog.CustomDialogEvent
 import com.app.keuanganku.ui.common.dialog.DialogEventBus
@@ -13,7 +13,7 @@ import com.app.keuanganku.usecase.allocationitem.UpdateAllocationItemUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DialogAddAllocationItem(val allocationItem: AllocationItem? = null) : BaseCustomDialog(),
+class DialogAddDecutionItem(val deductionItem: DeductionItem? = null) : BaseCustomDialog(),
     BaseCustomDialogViewMvc.Listener {
 
     @Inject
@@ -28,7 +28,7 @@ class DialogAddAllocationItem(val allocationItem: AllocationItem? = null) : Base
     @Inject
     lateinit var updateAllocationItemUseCase: UpdateAllocationItemUseCase
 
-    lateinit var viewMvc: DialogAddAllocationItemViewMvc
+    lateinit var viewMvc: DialogAddDeductionItemViewMvc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injector.inject(this)
@@ -38,7 +38,7 @@ class DialogAddAllocationItem(val allocationItem: AllocationItem? = null) : Base
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         viewMvc = viewMvcFactory.getDialogAddAllocationItemViewMvc(null)
         viewMvc.setTitle("Add Allocation Item")
-        viewMvc.setSalaryAllocationItem(allocationItem)
+        viewMvc.setSalaryAllocationItem(deductionItem)
 
         val dialog = Dialog(requireContext())
         dialog.setContentView(viewMvc.getRootView())
@@ -58,9 +58,9 @@ class DialogAddAllocationItem(val allocationItem: AllocationItem? = null) : Base
 
     override fun onClickPositiveButton(objects: Any) {
         coroutineScope.launch {
-            val item = objects as AllocationItem
+            val item = objects as DeductionItem
 
-            if (allocationItem?.allocationItemId != null && allocationItem.allocationItemId == item.allocationItemId) {
+            if (deductionItem?.allocationItemId != null && deductionItem.allocationItemId == item.allocationItemId) {
                 updateAllocationItemUseCase.updateSalaryAllocation(item)
             } else {
                 insertAllocationItemUseCase.insertAllocation(item)

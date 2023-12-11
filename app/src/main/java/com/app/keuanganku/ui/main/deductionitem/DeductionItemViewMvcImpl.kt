@@ -1,15 +1,15 @@
-package com.app.keuanganku.ui.main.allocationitem
+package com.app.keuanganku.ui.main.deductionitem
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import com.app.keuanganku.R
-import com.app.keuanganku.data.entity.AllocationItem
+import com.app.keuanganku.data.entity.DeductionItem
 import com.app.keuanganku.ui.common.viewmvc.BaseObservableViewMvc
 
-class AllocationItemViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?) :
-    BaseObservableViewMvc<AllocationItemViewMvc.Listener>(),
-    AllocationItemViewMvc {
+class DeductionItemViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGroup?) :
+    BaseObservableViewMvc<DeductionItemViewMvc.Listener>(),
+    DeductionItemViewMvc {
 
     private val tvItemName: TextView
     private val tvItemAmount: TextView
@@ -21,8 +21,8 @@ class AllocationItemViewMvcImpl(layoutInflater: LayoutInflater, parent: ViewGrou
         tvItemAmount = findViewById(R.id.tv_item_allocation_amount)
     }
 
-    override fun bindItem(allocationItem: AllocationItem) {
-        tvItemName.text = allocationItem.title
-        tvItemAmount.text = allocationItem.amount.toString()
+    override fun bindItem(deductionItem: DeductionItem) {
+        tvItemName.text = deductionItem.title
+        tvItemAmount.text = deductionItem.amount.toString()
     }
 }

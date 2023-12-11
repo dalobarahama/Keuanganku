@@ -1,6 +1,6 @@
 package com.app.keuanganku.common.di.presentation
 
-import com.app.keuanganku.ui.common.dialog.addallocationitem.DialogAddAllocationItem
+import com.app.keuanganku.ui.common.dialog.addallocationitem.DialogAddDecutionItem
 import com.app.keuanganku.ui.common.dialog.addsalary.DialogAddSalary
 import com.app.keuanganku.ui.common.dialog.addsalaryallocation.DialogAddAllocation
 import com.app.keuanganku.ui.main.MainActivity
@@ -12,5 +12,5 @@ interface PresentationComponent {
     fun inject(activity: MainActivity)
     fun inject(dialog: DialogAddSalary)
     fun inject(dialog: DialogAddAllocation)
-    fun inject(dialog: DialogAddAllocationItem)
+    fun inject(dialog: DialogAddDecutionItem)
 }

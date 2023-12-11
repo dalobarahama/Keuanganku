@@ -1,10 +1,8 @@
 package com.app.keuanganku.ui.main
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.keuanganku.data.entity.SalaryAllocation
-import com.app.keuanganku.data.helper.AllocationDiffCallback
 import com.app.keuanganku.ui.common.ViewMvcFactory
 import com.app.keuanganku.ui.main.MainActivityAdapter.MainActivityViewHolder
 import com.app.keuanganku.ui.main.salaryallocationitem.SalaryAllocationItemViewMvc
@@ -43,6 +41,7 @@ class MainActivityAdapter(
 
     override fun onBindViewHolder(holder: MainActivityViewHolder, position: Int) {
         holder.viewMvc.bindSalaryAllocation(listSalaryAllocations[position])
+//        holder.viewMvc.bindDeductionItem(listSalaryAllocations[position])
     }
 
     override fun getItemCount(): Int {
